@@ -31,6 +31,7 @@ resource "google_container_cluster" "primary" {
     ]
 
     machine_type = "${var.initial_machine_type}"
+    image_type   = "${var.initial_image_type}"
 
     labels {
       environment = "${var.environment}"
@@ -41,17 +42,14 @@ resource "google_container_cluster" "primary" {
 }
 
 module "node-pool" {
-  name         = "${var.name}"
   source       = "./modules/kubernetes_node_pools"
-  node_count   = "${var.node_pool_count}"
   node_version = "${var.node_version}"
   region       = "${var.region}"
   zones        = ["${var.zones}"]
   project      = "${var.project}"
   environment  = "${terraform.workspace}"
-  machine_type = "${var.node_pool_machine_type}"
   cluster_name = "${google_container_cluster.primary.name}"
-  tags         = "${var.tags}"
+  node_pools   = "${var.node_pools}"
 }
 
 resource "google_compute_network" "default" {

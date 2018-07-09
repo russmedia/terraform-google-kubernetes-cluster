@@ -1,9 +1,14 @@
 resource "google_container_node_pool" "node_pool" {
-  name       = "${var.name}"
-  zone       = "${var.region}-${var.zones[0]}"
-  cluster    = "${var.cluster_name}"
-  node_count = "${var.node_count}"
-  version    = "${var.node_version}"
+  count   = "${length(var.node_pools)}"
+  name    = "${lookup(var.node_pools[count.index], "name")}"
+  zone    = "${var.region}-${var.zones[0]}"
+  cluster = "${var.cluster_name}"
+  version = "${var.node_version}"
+
+  autoscaling = {
+    min_node_count = "${lookup(var.node_pools[count.index], "min_node_count")}"
+    max_node_count = "${lookup(var.node_pools[count.index], "max_node_count")}"
+  }
 
   node_config {
     oauth_scopes = [
@@ -13,12 +18,14 @@ resource "google_container_node_pool" "node_pool" {
       "https://www.googleapis.com/auth/monitoring",
     ]
 
-    machine_type = "${var.machine_type}"
+    preemptible  = "${lookup(var.node_pools[count.index], "preemptible")}"
+    machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
+    image_type   = "${lookup(var.node_pools[count.index], "image_type")}"
 
     labels {
       environment = "${var.environment}"
     }
 
-    tags = "${var.tags}"
+    tags = "${split(" ", lookup(var.node_pools[count.index], "tags"))}"
   }
 }

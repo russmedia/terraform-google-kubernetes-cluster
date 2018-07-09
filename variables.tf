@@ -35,24 +35,14 @@ variable "initial_machine_type" {
   description = "Initial vm type"
 }
 
-variable "node_pool_count" {
-  default     = 1
-  description = "Additional pool node count per zone"
-}
-
-variable "node_pool_machine_type" {
-  default     = "n1-standard-1"
-  description = "Additional worker pool vm type"
+variable "initial_image_type" {
+  default     = "COS"
+  description = "Initial worker pool vm image"
 }
 
 variable "min_master_version" {
   default     = "1.8.12-gke.1"
   description = "Kubernetes master version"
-}
-
-variable "node_version" {
-  default     = "1.8.12-gke.1"
-  description = "Kubernetes worker version"
 }
 
 variable "nodes_subnet_ip_cidr_range" {
@@ -68,4 +58,36 @@ variable "nodes_subnet_container_ip_cidr_range" {
 variable "nodes_subnet_service_ip_cidr_range" {
   default     = "10.200.0.0/16"
   description = "Cidr range for Kubernetes services"
+}
+
+variable "node_version" {
+  default     = "1.8.12-gke.1"
+  description = "Kubernetes worker version"
+}
+
+variable "node_pools" {
+  type = "list"
+
+  default = [
+    {
+      name           = "additional-pool"
+      min_node_count = 1
+      max_node_count = 1
+      image_type     = "COS"
+      machine_type   = "n1-standard-1"
+      preemptible    = false
+      tags           = "additional-pool worker"
+    },
+  ]
+
+  description = <<EOF
+    Attributes of node pool:
+      - name
+      - min_node_count [number]
+      - max_node_count [number]
+      - image_type
+      - machine_type
+      - preemptible [bool]
+      - tags [space separated tags]
+  EOF
 }
