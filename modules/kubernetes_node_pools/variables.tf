@@ -1,5 +1,30 @@
-variable "name" {
-  description = "Node pool name"
+variable "node_pools" {
+  type = "list"
+
+  default = [
+    {
+      name           = "additional-pool"
+      min_node_count = 1
+      max_node_count = 1
+      version        = "1.8.12-gke.1"
+      image_type     = "COS"
+      machine_type   = "n1-standard-1"
+      preemptible    = false
+      tags           = "additional-pool worker"
+    },
+  ]
+
+  description = <<EOF
+    Attributes of node pool:
+      - name
+      - min_node_count [number]
+      - max_node_count [number]
+      - version [Kubernetes worker version]
+      - image_type
+      - machine_type
+      - preemptible [bool]
+      - tags [space separated tags]
+  EOF
 }
 
 variable "project" {
@@ -15,28 +40,8 @@ variable "zones" {
   description = "Zones for node pool"
 }
 
-variable "tags" {
-  type        = "list"
-  description = "Node pool vm's tags"
-  default     = []
-}
-
 variable "environment" {
   description = "Environment node label"
-}
-
-variable "node_count" {
-  default     = 1
-  description = "Node count per zone"
-}
-
-variable "node_version" {
-  description = "Kubernetes worker version"
-}
-
-variable "machine_type" {
-  default     = "n1-standard-1"
-  description = "Node pool vm type"
 }
 
 variable "cluster_name" {
