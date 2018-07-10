@@ -17,13 +17,12 @@ a) cluster with one additional pool
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=0.0.1"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
   environment            = "${terraform.workspace}"
   tags                   = ["nat-${terraform.workspace}"]
-  node_version           = "${var.node_version}"
   min_master_version     = "${var.master_version}"
 }
 ```
@@ -33,7 +32,7 @@ b) cluster with explicit definition of additional node pools (optional)
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=0.0.1"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -53,6 +52,7 @@ node_pools = [
     name            = "additional-pool"
     min_node_count  = 1
     max_node_count  = 2
+    version         = "1.8.12-gke.1"
     image_type      = "COS"
     machine_type    = "n1-standard-1"
     preemptible     = false
@@ -63,7 +63,7 @@ node_pools = [
 
 c) add nat module (optional)
 
-Adding NAT module to for outgoing Kubernetes IP:
+Adding NAT module for outgoing Kubernetes IP:
 ```hcl
 module "nat" {
   source     = "github.com/GoogleCloudPlatform/terraform-google-nat-gateway?ref=1.1.8"

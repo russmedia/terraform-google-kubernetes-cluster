@@ -43,7 +43,6 @@ resource "google_container_cluster" "primary" {
 
 module "node-pool" {
   source       = "./modules/kubernetes_node_pools"
-  node_version = "${var.node_version}"
   region       = "${var.region}"
   zones        = ["${var.zones}"]
   project      = "${var.project}"

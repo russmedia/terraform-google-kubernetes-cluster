@@ -73,6 +73,7 @@ variable "node_pools" {
       name           = "additional-pool"
       min_node_count = 1
       max_node_count = 1
+      version        = "1.8.12-gke.1"
       image_type     = "COS"
       machine_type   = "n1-standard-1"
       preemptible    = false
@@ -85,6 +86,7 @@ variable "node_pools" {
       - name
       - min_node_count [number]
       - max_node_count [number]
+      - version [Kubernetes worker version]
       - image_type
       - machine_type
       - preemptible [bool]
