@@ -57,7 +57,7 @@ node_pools = [
     image_type      = "COS"
     machine_type    = "n1-standard-1"
     preemptible     = false
-    tags            = "tag1 tag2"
+    tags            = "tag1 nat-${terraform.workspace}"
   },
 ]
 ```
@@ -75,6 +75,8 @@ module "nat" {
   tags       = ["nat-${terraform.workspace}"]
 }
 ```
+
+Note: remember to add tag `nat-${terraform.workspace}` to primary cluster tags and node pools so NAT module can open routing for nodes.
 
 ## 3. Authors
 
