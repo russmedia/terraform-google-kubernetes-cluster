@@ -28,7 +28,7 @@ module "primary-cluster" {
 }
 ```
 
-Adding NAT module to for outgoing Kubernetes IP:
+Adding NAT module for outgoing Kubernetes IP:
 ```hcl
 module "nat" {
   source     = "github.com/GoogleCloudPlatform/terraform-google-nat-gateway?ref=1.1.8"
