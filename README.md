@@ -7,7 +7,8 @@ GKE Kubernetes module with node pools submodule
 
 - basic node pool with node number multiplied by defined zones
 - additional node pools with node number multiplied by defined zones
-- node pools with autoscaling enabled
+- node pools with autoscaling enabled (scale to 0 nodes available)
+- node pools with preemptible instances
 - ip_allocation_policy for exposing nodes/services/pods in VPC
 - tested with NAT module
 
