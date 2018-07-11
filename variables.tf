@@ -41,7 +41,7 @@ variable "initial_image_type" {
 }
 
 variable "min_master_version" {
-  default     = "1.8.12-gke.1"
+  default     = "1.10.4-gke.2"
   description = "Kubernetes master version"
 }
 
@@ -61,7 +61,7 @@ variable "nodes_subnet_service_ip_cidr_range" {
 }
 
 variable "node_version" {
-  default     = "1.8.12-gke.1"
+  default     = "1.10.4-gke.2"
   description = "Kubernetes worker version"
 }
 
@@ -73,7 +73,7 @@ variable "node_pools" {
       name           = "additional-pool"
       min_node_count = 1
       max_node_count = 1
-      version        = "1.8.12-gke.1"
+      version        = "1.10.4-gke.2"
       image_type     = "COS"
       machine_type   = "n1-standard-1"
       preemptible    = false
