@@ -57,7 +57,7 @@ node_pools = [
     image_type      = "COS"
     machine_type    = "n1-standard-1"
     preemptible     = false
-    tags            = "tag1 nat-${terraform.workspace}"
+    tags            = "tag1 nat"
   },
 ]
 ```
