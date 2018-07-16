@@ -24,10 +24,11 @@ node_pools = [
     name           = "additional-pool"
     min_node_count = 1
     max_node_count = 1
+    version        = "1.10.4-gke.2"
     image_type     = "COS"
     machine_type   = "n1-standard-1"
     preemptible    = false
-    tags           = "nat-beta"
+    tags           = "additional-pool worker"
   },
 ]
 ```
