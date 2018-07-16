@@ -3,7 +3,6 @@ resource "google_container_cluster" "primary" {
   zone               = "${var.region}-${var.zones[0]}"
   initial_node_count = "${var.initial_node_count}"
   min_master_version = "${var.min_master_version}"
-  network            = "${google_compute_network.default.self_link}"
   enable_legacy_abac = "false"
   node_version       = "${var.node_version}"
 
@@ -52,6 +51,7 @@ module "node-pool" {
 }
 
 resource "google_compute_network" "default" {
+  count                   = "${var.network == "" ? 1 : 0}"
   name                    = "${terraform.workspace}"
   auto_create_subnetworks = "false"
 }
@@ -60,7 +60,7 @@ resource "google_compute_network" "default" {
 resource "google_compute_subnetwork" "nodes-subnet" {
   name          = "${terraform.workspace}-nodes-subnet"
   ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
-  network       = "${google_compute_network.default.self_link}"
+  network       = "${var.network == "" ? format("https://www.googleapis.com/compute/beta/projects/%s/global/networks/%s", var.project , terraform.workspace) : format("https://www.googleapis.com/compute/beta/projects/%s/global/networks/%s", var.project , var.network)}"
   region        = "${var.region}"
 
   secondary_ip_range {

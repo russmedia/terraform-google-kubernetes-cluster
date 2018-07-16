@@ -6,6 +6,16 @@ variable "project" {
   description = "Google Cloud project name"
 }
 
+variable "network" {
+  description = <<EOF
+  Network to create the cluster in 
+    - module will create a network based on terraform workspace name if this variable is empty
+    - if we define a network here it needs to exist already
+EOF
+
+  default = ""
+}
+
 variable "region" {
   description = "Kubernetes cluster region"
 }
