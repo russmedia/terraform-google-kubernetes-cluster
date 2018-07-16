@@ -18,7 +18,3 @@ output "primary_cluster_id" {
 output "master_ip" {
   value = "${google_container_cluster.primary.endpoint}"
 }
-
-output "default-network" {
-  value = "${google_container_cluster.primary.default_network}"
-}
