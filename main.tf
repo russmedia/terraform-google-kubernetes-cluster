@@ -5,8 +5,8 @@ resource "google_container_cluster" "primary" {
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = "false"
   node_version       = "${var.node_version}"
-
-  subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
+  network            = "${var.network == "" ? format("https://www.googleapis.com/compute/beta/projects/%s/global/networks/%s", var.project , terraform.workspace) : format("https://www.googleapis.com/compute/beta/projects/%s/global/networks/%s", var.project , var.network)}"
+  subnetwork         = "${google_compute_subnetwork.nodes-subnet.self_link}"
 
   ip_allocation_policy {
     cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
