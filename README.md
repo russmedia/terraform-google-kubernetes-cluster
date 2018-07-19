@@ -78,6 +78,20 @@ module "nat" {
 
 Note: remember to add tag `nat-${terraform.workspace}` to primary cluster tags and node pools so NAT module can open routing for nodes.
 
+d) using an existing or creating a new vpc network.
+
+Variable "network" is controling network creation. 
+- when left empty (by default `network=""`) - terraform will create a vpc network - network name will be equal to `${terraform.workspace}`.
+- when we define a name - this network **must already exist** within the project - terraform will create a subnetwork within defined network and place the cluster in it.
+
+e) subnetworks
+
+Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-nodes-subnet`.
+
+- we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask.
+- we define kubernetes pods CIDR using `nodes_subnet_container_ip_cidr_range` variable
+- we define kubernetes service CIDR using `nodes_subnet_service_ip_cidr_range` variable
+
 ## 3. Authors
 
 - [Eryk Zalejski](https://github.com/ezalejski)
