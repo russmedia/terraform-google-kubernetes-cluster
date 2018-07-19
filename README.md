@@ -88,7 +88,7 @@ e) subnetworks
 
 Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-nodes-subnet`.
 
-- we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask.
+- we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask
 - we define kubernetes pods CIDR using `nodes_subnet_container_ip_cidr_range` variable
 - we define kubernetes service CIDR using `nodes_subnet_service_ip_cidr_range` variable
 
