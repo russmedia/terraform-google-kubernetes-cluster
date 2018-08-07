@@ -4,6 +4,7 @@ resource "google_container_node_pool" "node_pool" {
   zone    = "${var.region}-${var.zones[0]}"
   cluster = "${var.cluster_name}"
   version = "${lookup(var.node_pools[count.index], "version")}"
+  project = "${var.project}"
 
   autoscaling = {
     min_node_count = "${lookup(var.node_pools[count.index], "min_node_count")}"
