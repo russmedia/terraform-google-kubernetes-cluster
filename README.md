@@ -18,7 +18,7 @@ a) cluster with one additional pool
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.1.0"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.4.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -33,7 +33,7 @@ b) cluster with explicit definition of additional node pools (optional)
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.1.0"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.4.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
