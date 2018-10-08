@@ -25,33 +25,12 @@ variable "zones" {
   description = "Zones for Kubernetes workers"
 }
 
-variable "tags" {
-  type        = "list"
-  description = "Kubernetes workers tags"
-  default     = []
-}
-
 variable "environment" {
   description = "Environment label"
 }
 
-variable "initial_node_count" {
-  default     = 1
-  description = "Initial node count per zone"
-}
-
-variable "initial_machine_type" {
-  default     = "g1-small"
-  description = "Initial vm type"
-}
-
-variable "initial_image_type" {
-  default     = "COS"
-  description = "Initial worker pool vm image"
-}
-
 variable "min_master_version" {
-  default     = "1.10.6-gke.2"
+  default     = "1.10.7-gke.2"
   description = "Kubernetes master version"
 }
 
@@ -70,30 +49,27 @@ variable "nodes_subnet_service_ip_cidr_range" {
   description = "Cidr range for Kubernetes services"
 }
 
-variable "node_version" {
-  default     = "1.10.6-gke.2"
-  description = "Kubernetes worker version"
-}
-
 variable "node_pools" {
   type = "list"
 
   default = [
     {
-      name           = "additional-pool"
-      min_node_count = 1
-      max_node_count = 1
-      version        = "1.10.6-gke.2"
-      image_type     = "COS"
-      machine_type   = "n1-standard-1"
-      preemptible    = false
-      tags           = "additional-pool worker"
+      name               = "default-pool"
+      initial_node_count = 1
+      min_node_count     = 1
+      max_node_count     = 3
+      version            = "1.10.7-gke.2"
+      image_type         = "COS"
+      machine_type       = "n1-standard-1"
+      preemptible        = true
+      tags               = "default-pool worker"
     },
   ]
 
   description = <<EOF
     Attributes of node pool:
       - name
+      - initial_node_count [number]
       - min_node_count [number]
       - max_node_count [number]
       - version [Kubernetes worker version]
