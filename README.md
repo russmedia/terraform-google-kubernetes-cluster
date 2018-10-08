@@ -13,7 +13,7 @@ GKE Kubernetes module with node pools submodule
 
 ## 2. Usage:
 
-a) cluster with default node pool on preembible
+a) cluster with default node pool on preemptible
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
