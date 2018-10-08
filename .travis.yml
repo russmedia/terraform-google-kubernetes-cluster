@@ -1,13 +1,13 @@
 
 env:
-  - TF_VERSION=0.1.18
+  - TF_VERSION=0.11.8
 
 sudo: required
 
 language: bash
 
 before_install:
-  - wget -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+  - wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip -O /tmp/terraform.zip 
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 script:
