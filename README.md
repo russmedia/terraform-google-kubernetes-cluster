@@ -60,7 +60,7 @@ node_pools = [
   },
 ]
 ```
-Note: at least one node pool must have `initial_node_count` > 0.
+**Note: at least one node pool must have `initial_node_count` > 0.**
 
 c) add nat module (optional)
 
