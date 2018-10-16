@@ -30,7 +30,7 @@ variable "environment" {
 }
 
 variable "min_master_version" {
-  default     = "1.10.7-gke.2"
+  default     = "1.10.7-gke.6"
   description = "Kubernetes master version"
 }
 
@@ -58,7 +58,7 @@ variable "node_pools" {
       initial_node_count = 1
       min_node_count     = 1
       max_node_count     = 3
-      version            = "1.10.7-gke.2"
+      version            = "1.10.7-gke.6"
       image_type         = "COS"
       machine_type       = "n1-standard-1"
       preemptible        = true
