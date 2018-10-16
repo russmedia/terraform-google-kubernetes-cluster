@@ -17,7 +17,7 @@ a) cluster with default node pool on preemptible
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.0"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.1"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -32,7 +32,7 @@ b) cluster with explicit definition of node pools (optional)
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.0"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.1"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"

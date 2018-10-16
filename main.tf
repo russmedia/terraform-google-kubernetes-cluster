@@ -3,7 +3,7 @@ resource "google_container_cluster" "primary" {
   zone = "${var.region}-${var.zones[0]}"
 
   min_master_version = "${var.min_master_version}"
-  enable_legacy_abac = "false"
+  enable_legacy_abac = false
 
   network    = "${var.network == "" ? terraform.workspace : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
@@ -22,9 +22,8 @@ resource "google_container_cluster" "primary" {
     ignore_changes = ["subnetwork"]
   }
 
-  node_pool {
-    name = "empty-default-pool" # disabling default node pool
-  }
+  initial_node_count       = 1
+  remove_default_node_pool = true
 }
 
 module "node-pool" {
