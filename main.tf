@@ -1,13 +1,13 @@
 resource "google_container_cluster" "primary" {
-  name               = "${var.name}"
-  zone               = "${var.region}-${var.zones[0]}"
-  initial_node_count = "${var.initial_node_count}"
+  name = "${var.name}"
+  zone = "${var.region}-${var.zones[0]}"
+
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = "false"
-  node_version       = "${var.node_version}"
-  network            = "${var.network == "" ? terraform.workspace : var.network}"
-  subnetwork         = "${google_compute_subnetwork.nodes-subnet.self_link}"
-  project            = "${var.project}"
+
+  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
+  project    = "${var.project}"
 
   ip_allocation_policy {
     cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
@@ -22,22 +22,8 @@ resource "google_container_cluster" "primary" {
     ignore_changes = ["subnetwork"]
   }
 
-  node_config {
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
-
-    machine_type = "${var.initial_machine_type}"
-    image_type   = "${var.initial_image_type}"
-
-    labels {
-      environment = "${var.environment}"
-    }
-
-    tags = "${var.tags}"
+  node_pool {
+    name = "empty-default-pool" # disabling default node pool
   }
 }
 

@@ -1,10 +1,11 @@
 resource "google_container_node_pool" "node_pool" {
-  count   = "${length(var.node_pools)}"
-  name    = "${lookup(var.node_pools[count.index], "name")}"
-  zone    = "${var.region}-${var.zones[0]}"
-  cluster = "${var.cluster_name}"
-  version = "${lookup(var.node_pools[count.index], "version")}"
-  project = "${var.project}"
+  count              = "${length(var.node_pools)}"
+  name               = "${lookup(var.node_pools[count.index], "name")}"
+  zone               = "${var.region}-${var.zones[0]}"
+  cluster            = "${var.cluster_name}"
+  version            = "${lookup(var.node_pools[count.index], "version")}"
+  project            = "${var.project}"
+  initial_node_count = "${lookup(var.node_pools[count.index], "initial_node_count")}"
 
   autoscaling = {
     min_node_count = "${lookup(var.node_pools[count.index], "min_node_count")}"
