@@ -7,19 +7,20 @@ GKE Kubernetes module with node pools submodule
 Table of contents
 =================
 
-   * [Overview](#terraform-google-kubernetes-cluster)
+   * [Overview](#overview)
    * [Table of contents](#table-of-contents)
       * [1. Features](#1-features)
       * [2. Usage](#2-usage)
          * [cluster with default node pool on preemptible](#cluster-with-default-node-pool-on-preemptible)
          * [cluster with explicit definition of node pools (optional)](#cluster-with-explicit-definition-of-node-pools-optional)
-         * [multiple clusters:](#multiple-clusters)
+         * [multiple clusters](#multiple-clusters)
          * [add nat module (optional)](#add-nat-module-optional)
-         * [using an existing or creating a new vpc network.](#using-an-existing-or-creating-a-new-vpc-network)
+         * [using an existing or creating a new vpc network](#using-an-existing-or-creating-a-new-vpc-network)
          * [subnetworks](#subnetworks)
       * [3. Authors](#3-authors)
       * [4. License](#4-license)
       * [4. Acknowledgments](#4-acknowledgments)
+
 
 
 ## 1. Features
@@ -81,7 +82,7 @@ node_pools = [
 ```
 **Note: at least one node pool must have `initial_node_count` > 0.**
 
-###  multiple clusters:
+###  multiple clusters
 
 Due to current limitations with depends_on feature and modules it is advised to create vpc network separately and use it when defining modules, i.e: 
 
@@ -137,7 +138,7 @@ module "nat" {
 
 Note: remember to add tag `nat-${terraform.workspace}` to primary cluster tags and node pools so NAT module can open routing for nodes.
 
-### using an existing or creating a new vpc network.
+### using an existing or creating a new vpc network
 
 Variable "network" is controling network creation. 
 - when left empty (by default `network=""`) - terraform will create a vpc network - network name will be equal to `${terraform.workspace}`.
