@@ -1,25 +1,25 @@
-# terraform-google-kubernetes-cluster
+# Overview
 GKE Kubernetes module with node pools submodule
+
+
+![Kuberntes diagram on GKE](images/diagram.png)
 
 Table of contents
 =================
 
-   * [terraform-google-kubernetes-cluster](#terraform-google-kubernetes-cluster)
+   * [Overview](#terraform-google-kubernetes-cluster)
+   * [Table of contents](#table-of-contents)
       * [1. Features](#1-features)
-      * [2. Usage:](#2-usage)
-         * [a) cluster with default node pool on preemptible](#a-cluster-with-default-node-pool-on-preemptible)
-         * [b) cluster with explicit definition of node pools (optional)](#b-cluster-with-explicit-definition-of-node-pools-optional)
-         * [c) multiple clusters:](#c-multiple-clusters)
-         * [d) add nat module (optional)](#d-add-nat-module-optional)
-         * [e) using an existing or creating a new vpc network.](#e-using-an-existing-or-creating-a-new-vpc-network)
-         * [f) subnetworks](#f-subnetworks)
+      * [2. Usage](#2-usage)
+         * [cluster with default node pool on preemptible](#cluster-with-default-node-pool-on-preemptible)
+         * [cluster with explicit definition of node pools (optional)](#cluster-with-explicit-definition-of-node-pools-optional)
+         * [multiple clusters:](#multiple-clusters)
+         * [add nat module (optional)](#add-nat-module-optional)
+         * [using an existing or creating a new vpc network.](#using-an-existing-or-creating-a-new-vpc-network)
+         * [subnetworks](#subnetworks)
       * [3. Authors](#3-authors)
       * [4. License](#4-license)
       * [4. Acknowledgments](#4-acknowledgments)
-
-
-
-![Kuberntes diagram on GKE](images/diagram.png)
 
 
 ## 1. Features
@@ -30,7 +30,7 @@ Table of contents
 - ip_allocation_policy for exposing nodes/services/pods in VPC
 - tested with NAT module
 
-## 2. Usage:
+## 2. Usage
 
 ### cluster with default node pool on preemptible
 ```hcl
