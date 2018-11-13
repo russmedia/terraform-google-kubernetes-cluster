@@ -45,7 +45,7 @@ resource "google_compute_network" "default" {
 
 # Subnet for cluster nodes
 resource "google_compute_subnetwork" "nodes-subnet" {
-  name          = "${terraform.workspace}-nodes-subnet"
+  name          = "${terraform.workspace}-${var.name}-nodes-subnet"
   ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
   network       = "${var.network == "" ? terraform.workspace : var.network}"
   region        = "${var.region}"

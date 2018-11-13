@@ -1,7 +1,27 @@
-# terraform-google-kubernetes-cluster
+# Overview
 GKE Kubernetes module with node pools submodule
 
+
 ![Kuberntes diagram on GKE](images/diagram.png)
+
+Table of contents
+=================
+
+   * [Overview](#overview)
+   * [Table of contents](#table-of-contents)
+      * [1. Features](#1-features)
+      * [2. Usage](#2-usage)
+         * [cluster with default node pool on preemptible](#cluster-with-default-node-pool-on-preemptible)
+         * [cluster with explicit definition of node pools (optional)](#cluster-with-explicit-definition-of-node-pools-optional)
+         * [multiple clusters](#multiple-clusters)
+         * [add nat module (optional)](#add-nat-module-optional)
+         * [using an existing or creating a new vpc network](#using-an-existing-or-creating-a-new-vpc-network)
+         * [subnetworks](#subnetworks)
+      * [3. Authors](#3-authors)
+      * [4. License](#4-license)
+      * [4. Acknowledgments](#4-acknowledgments)
+
+
 
 ## 1. Features
 
@@ -11,13 +31,13 @@ GKE Kubernetes module with node pools submodule
 - ip_allocation_policy for exposing nodes/services/pods in VPC
 - tested with NAT module
 
-## 2. Usage:
+## 2. Usage
 
-a) cluster with default node pool on preemptible
+### cluster with default node pool on preemptible
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.1"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.2"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -27,12 +47,12 @@ module "primary-cluster" {
 }
 ```
 
-b) cluster with explicit definition of node pools (optional)
+### cluster with explicit definition of node pools (optional)
 
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.1"
+  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.5.2"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -62,7 +82,47 @@ node_pools = [
 ```
 **Note: at least one node pool must have `initial_node_count` > 0.**
 
-c) add nat module (optional)
+###  multiple clusters
+
+Due to current limitations with depends_on feature and modules it is advised to create vpc network separately and use it when defining modules, i.e: 
+
+```hcl
+resource "google_compute_network" "default" {
+  name                    = "${terraform.workspace}"
+  auto_create_subnetworks = "false"
+  project                 = "${var.project}"
+}
+```
+
+```hcl
+module "primary-cluster" {
+  name        = "primary-cluster"
+  source      = "../../terraform-google-kubernetes-cluster"
+  region      = "${var.google_region}"
+  zones       = "${var.google_zones}"
+  project     = "${var.project}"
+  environment = "${terraform.workspace}"
+  network     = "${google_compute_network.default.name}"
+}
+```
+
+```hcl
+module "secondary-cluster" {
+  name                                 = "secondary-cluster"
+  source                               = "../../terraform-google-kubernetes-cluster"
+  region                               = "${var.google_region}"
+  zones                                = "${var.google_zones}"
+  project                              = "${var.project}"
+  environment                          = "${terraform.workspace}"
+  network                              = "${google_compute_network.default.name}"
+  nodes_subnet_ip_cidr_range           = "10.102.0.0/24"
+  nodes_subnet_container_ip_cidr_range = "172.21.0.0/16"
+  nodes_subnet_service_ip_cidr_range   = "10.201.0.0/16"
+}
+```
+**Note: secondary clusters need to have nodes_subnet_ip_cidr_range nodes_subnet_container_ip_cidr_range and nodes_subnet_service_ip_cidr_range defined, otherwise you will run into IP conflict.**
+
+### add nat module (optional)
 
 Adding NAT module for outgoing Kubernetes IP:
 ```hcl
@@ -78,15 +138,15 @@ module "nat" {
 
 Note: remember to add tag `nat-${terraform.workspace}` to primary cluster tags and node pools so NAT module can open routing for nodes.
 
-d) using an existing or creating a new vpc network.
+### using an existing or creating a new vpc network
 
 Variable "network" is controling network creation. 
 - when left empty (by default `network=""`) - terraform will create a vpc network - network name will be equal to `${terraform.workspace}`.
 - when we define a name - this network **must already exist** within the project - terraform will create a subnetwork within defined network and place the cluster in it.
 
-e) subnetworks
+### subnetworks
 
-Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-nodes-subnet`.
+Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`.
 
 - we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask
 - we define kubernetes pods CIDR using `nodes_subnet_container_ip_cidr_range` variable
