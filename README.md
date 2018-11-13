@@ -32,7 +32,7 @@ Table of contents
 
 ## 2. Usage:
 
-### a) cluster with default node pool on preemptible
+### cluster with default node pool on preemptible
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
@@ -46,7 +46,7 @@ module "primary-cluster" {
 }
 ```
 
-### b) cluster with explicit definition of node pools (optional)
+### cluster with explicit definition of node pools (optional)
 
 ```hcl
 module "primary-cluster" {
@@ -81,7 +81,7 @@ node_pools = [
 ```
 **Note: at least one node pool must have `initial_node_count` > 0.**
 
-### c) multiple clusters:
+###  multiple clusters:
 
 Due to current limitations with depends_on feature and modules it is advised to create vpc network separately and use it when defining modules, i.e: 
 
@@ -121,7 +121,7 @@ module "secondary-cluster" {
 ```
 **Note: secondary clusters need to have nodes_subnet_ip_cidr_range nodes_subnet_container_ip_cidr_range and nodes_subnet_service_ip_cidr_range defined, otherwise you will run into IP conflict.**
 
-### d) add nat module (optional)
+### add nat module (optional)
 
 Adding NAT module for outgoing Kubernetes IP:
 ```hcl
@@ -137,13 +137,13 @@ module "nat" {
 
 Note: remember to add tag `nat-${terraform.workspace}` to primary cluster tags and node pools so NAT module can open routing for nodes.
 
-### e) using an existing or creating a new vpc network.
+### using an existing or creating a new vpc network.
 
 Variable "network" is controling network creation. 
 - when left empty (by default `network=""`) - terraform will create a vpc network - network name will be equal to `${terraform.workspace}`.
 - when we define a name - this network **must already exist** within the project - terraform will create a subnetwork within defined network and place the cluster in it.
 
-### f) subnetworks
+### subnetworks
 
 Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`.
 
