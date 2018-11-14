@@ -101,7 +101,8 @@ module "primary-cluster" {
   zones       = "${var.google_zones}"
   project     = "${var.project}"
   environment = "${terraform.workspace}"
-  network     = "${terraform.workspace}"
+  network     = "${google_compute_network.default.name}"
+
 }
 ```
 
@@ -113,8 +114,8 @@ module "secondary-cluster" {
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
-  network                              = "${terraform.workspace}"
-  nodes_subnet_ip_cidr_range           = "10.102.0.0/24"
+  network                              = "${google_compute_network.default.name}"
+  nodes_subnet_ip_cidr_range           = "10.101.0.0/24"
   nodes_subnet_container_ip_cidr_range = "172.21.0.0/16"
   nodes_subnet_service_ip_cidr_range   = "10.201.0.0/16"
 }
