@@ -35,7 +35,7 @@ variable "min_master_version" {
 }
 
 variable "nodes_subnet_ip_cidr_range" {
-  default     = "10.101.0.0/24"
+  default     = "10.100.0.0/24"
   description = "Cidr range for Kubernetes workers"
 }
 
