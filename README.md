@@ -102,7 +102,6 @@ module "primary-cluster" {
   project     = "${var.project}"
   environment = "${terraform.workspace}"
   network     = "${google_compute_network.default.name}"
-
 }
 ```
 
