@@ -30,12 +30,12 @@ variable "environment" {
 }
 
 variable "min_master_version" {
-  default     = "1.10.7-gke.6"
+  default     = ""
   description = "Kubernetes master version"
 }
 
 variable "nodes_subnet_ip_cidr_range" {
-  default     = "10.101.0.0/24"
+  default     = "10.100.0.0/24"
   description = "Cidr range for Kubernetes workers"
 }
 
@@ -58,7 +58,7 @@ variable "node_pools" {
       initial_node_count = 1
       min_node_count     = 1
       max_node_count     = 3
-      version            = "1.10.7-gke.6"
+      version            = ""
       image_type         = "COS"
       machine_type       = "n1-standard-1"
       preemptible        = true
