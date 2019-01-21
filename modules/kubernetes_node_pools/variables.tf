@@ -50,3 +50,8 @@ variable "cluster_name" {
   default     = ""
   description = "Kubernetes cluster name"
 }
+
+variable "regional_cluster" {
+  default     = "false"
+  description = "Is the cluster regional?"
+}

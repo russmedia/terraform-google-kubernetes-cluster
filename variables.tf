@@ -25,6 +25,11 @@ variable "zones" {
   description = "Zones for Kubernetes workers"
 }
 
+variable "regional_cluster" {
+  default     = "false"
+  description = "Create multi-masters regional cluster?"
+}
+
 variable "environment" {
   description = "Environment label"
 }

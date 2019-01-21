@@ -1,6 +1,38 @@
 resource "google_container_cluster" "primary" {
   name = "${var.name}"
-  zone = "${var.region}-${var.zones[0]}"
+
+  zone  = "${var.region}-${var.zones[0]}"
+  count = "${var.regional_cluster == "false" ? 1 : 0 }"
+
+  min_master_version = "${var.min_master_version}"
+  enable_legacy_abac = false
+
+  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
+  project    = "${var.project}"
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
+    services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
+  }
+
+  additional_zones = [
+    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
+  ]
+
+  lifecycle {
+    ignore_changes = ["subnetwork"]
+  }
+
+  initial_node_count       = 1
+  remove_default_node_pool = true
+}
+
+resource "google_container_cluster" "primary-regional" {
+  name  = "${var.name}"
+  count = "${var.regional_cluster == "true" ? 1 : 0 }"
+
+  region = "${var.region}"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -27,13 +59,14 @@ resource "google_container_cluster" "primary" {
 }
 
 module "node-pool" {
-  source       = "./modules/kubernetes_node_pools"
-  region       = "${var.region}"
-  zones        = ["${var.zones}"]
-  project      = "${var.project}"
-  environment  = "${terraform.workspace}"
-  cluster_name = "${google_container_cluster.primary.name}"
-  node_pools   = "${var.node_pools}"
+  source           = "./modules/kubernetes_node_pools"
+  region           = "${coalesce(join("",google_container_cluster.primary.*.region), join("",google_container_cluster.primary-regional.*.region))}"
+  zones            = ["${var.zones}"]
+  project          = "${var.project}"
+  environment      = "${terraform.workspace}"
+  cluster_name     = "${var.name}"
+  node_pools       = "${var.node_pools}"
+  regional_cluster = "${var.regional_cluster}"
 }
 
 resource "google_compute_network" "default" {
