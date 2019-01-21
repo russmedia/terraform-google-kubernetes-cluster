@@ -37,7 +37,8 @@ Table of contents
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                 = "russmedia/kubernetes-cluster/google"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -52,7 +53,8 @@ module "primary-cluster" {
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                 = "russmedia/kubernetes-cluster/google"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -96,7 +98,8 @@ resource "google_compute_network" "default" {
 ```hcl
 module "primary-cluster" {
   name        = "primary-cluster"
-  source      = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source      = "russmedia/kubernetes-cluster/google"
+  version     = "2.0.0"
   region      = "${var.google_region}"
   zones       = "${var.google_zones}"
   project     = "${var.project}"
@@ -108,7 +111,8 @@ module "primary-cluster" {
 ```hcl
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
-  source                               = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                               = "russmedia/kubernetes-cluster/google"
+  version                              = "2.0.0"
   region                               = "${var.google_region}"
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
