@@ -54,6 +54,11 @@ variable "min_master_version" {
   description = "Kubernetes master version"
 }
 
+variable "master_subnet_ip_cidr_range" {
+  default     = "10.10.0.0/28"
+  description = "Cidr range for Kubernetes masters - needed for regional clusters"
+}
+
 variable "nodes_subnet_ip_cidr_range" {
   default     = "10.100.0.0/24"
   description = "Cidr range for Kubernetes workers"
