@@ -16,6 +16,21 @@ EOF
   default = ""
 }
 
+variable "subnetwork_name" {
+  description = <<EOF
+  Subnetwork to create the cluster in 
+    - module will create a subnetwork based on terraform workspace and cluster name if this variable is empty
+    - if we define a network here it needs to have uniqe name 
+EOF
+
+  default = ""
+}
+
+variable "nat_enabled" {
+  description = "Enable Cloud Nat Module for cluster"
+  default     = false
+}
+
 variable "region" {
   description = "Kubernetes cluster region"
 }
@@ -26,8 +41,8 @@ variable "zones" {
 }
 
 variable "regional_cluster" {
-  default     = "false"
-  description = "Create multi-masters regional cluster?"
+  default     = false
+  description = "Set to `true` to create regional cluster"
 }
 
 variable "environment" {

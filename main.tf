@@ -2,7 +2,7 @@ resource "google_container_cluster" "primary" {
   name = "${var.name}"
 
   zone  = "${var.region}-${var.zones[0]}"
-  count = "${var.regional_cluster == "false" ? 1 : 0 }"
+  count = "${var.regional_cluster ? 0 : 1 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -30,7 +30,7 @@ resource "google_container_cluster" "primary" {
 
 resource "google_container_cluster" "primary-regional" {
   name  = "${var.name}"
-  count = "${var.regional_cluster == "true" ? 1 : 0 }"
+  count = "${var.regional_cluster ? 1 : 0 }"
 
   region = "${var.region}"
 
@@ -60,7 +60,7 @@ resource "google_container_cluster" "primary-regional" {
 
 module "node-pool" {
   source           = "./modules/kubernetes_node_pools"
-  region           = "${coalesce(join("",google_container_cluster.primary.*.region), join("",google_container_cluster.primary-regional.*.region))}"
+  region           = "${coalesce(var.region, join("",google_container_cluster.primary-regional.*.region))}"
   zones            = ["${var.zones}"]
   project          = "${var.project}"
   environment      = "${terraform.workspace}"
@@ -76,10 +76,14 @@ resource "google_compute_network" "default" {
   project                 = "${var.project}"
 }
 
+locals {
+  subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
+}
+
 # Subnet for cluster nodes
 resource "google_compute_subnetwork" "nodes-subnet" {
   depends_on    = ["google_compute_network.default"]
-  name          = "${terraform.workspace}-${var.name}-nodes-subnet"
+  name          = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
   ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
   network       = "${var.network == "" ? terraform.workspace : var.network}"
   region        = "${var.region}"
@@ -93,5 +97,34 @@ resource "google_compute_subnetwork" "nodes-subnet" {
   secondary_ip_range {
     range_name    = "${terraform.workspace}-service-range-1"
     ip_cidr_range = "${var.nodes_subnet_service_ip_cidr_range}"
+  }
+}
+
+resource "google_compute_router" "router" {
+  count   = "${var.nat_enabled ? 1 : 0}"
+  name    = "router"
+  region  = "${var.region}"
+  network = "${var.network == "" ? terraform.workspace : var.network}"
+}
+
+resource "google_compute_address" "address" {
+  count  = "${var.nat_enabled ? 1 : 0}"
+  name   = "nat-external-address-${count.index}"
+  region = "${var.region}"
+}
+
+resource "google_compute_router_nat" "advanced-nat" {
+  count                              = "${var.nat_enabled ? 1 : 0}"
+  name                               = "nat-1"
+  router                             = "${google_compute_router.router.name}"
+  region                             = "${var.region}"
+  nat_ip_allocate_option             = "MANUAL_ONLY"
+  nat_ips                            = ["${google_compute_address.address.*.self_link}"]
+  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+
+  subnetwork {
+    name                     = "${google_compute_subnetwork.nodes-subnet.self_link}"
+    source_ip_ranges_to_nat  = ["LIST_OF_SECONDARY_IP_RANGES"]
+    secondary_ip_range_names = ["${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}", "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"]
   }
 }

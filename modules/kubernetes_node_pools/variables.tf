@@ -52,6 +52,6 @@ variable "cluster_name" {
 }
 
 variable "regional_cluster" {
-  default     = "false"
-  description = "Is the cluster regional?"
+  default     = false
+  description = "Set to `true` to create node pool for regional cluster."
 }
