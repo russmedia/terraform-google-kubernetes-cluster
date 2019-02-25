@@ -41,6 +41,12 @@ resource "google_container_cluster" "primary-regional" {
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
+  private_cluster_config {
+    enable_private_nodes    = "false"
+    enable_private_endpoint = "false"
+    master_ipv4_cidr_block  = "${var.master_subnet_ip_cidr_range}"
+  }
+
   ip_allocation_policy {
     cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
@@ -72,8 +78,7 @@ resource "google_container_cluster" "primary-nat" {
   project    = "${var.project}"
 
   private_cluster_config {
-    enable_private_nodes    = "true"
-    enable_private_endpoint = "true"
+    master_ipv4_cidr_block = "${var.master_subnet_ip_cidr_range}"
   }
 
   ip_allocation_policy {
@@ -109,6 +114,7 @@ resource "google_container_cluster" "primary-regional-nat" {
   private_cluster_config {
     enable_private_nodes    = "true"
     enable_private_endpoint = "true"
+    master_ipv4_cidr_block  = "${var.master_subnet_ip_cidr_range}"
   }
 
   ip_allocation_policy {
