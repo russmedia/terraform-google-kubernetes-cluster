@@ -206,11 +206,5 @@ resource "google_compute_router_nat" "advanced-nat" {
   region                             = "${var.region}"
   nat_ip_allocate_option             = "MANUAL_ONLY"
   nat_ips                            = ["${google_compute_address.address.*.self_link}"]
-  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-
-  subnetwork {
-    name                     = "${google_compute_subnetwork.nodes-subnet.self_link}"
-    source_ip_ranges_to_nat  = ["LIST_OF_SECONDARY_IP_RANGES"]
-    secondary_ip_range_names = ["${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}", "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"]
-  }
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
