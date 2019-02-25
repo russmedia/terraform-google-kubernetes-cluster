@@ -2,7 +2,7 @@ resource "google_container_cluster" "primary" {
   name = "${var.name}"
 
   zone  = "${var.region}-${var.zones[0]}"
-  count = "${var.regional_cluster ? 0 : 1 }"
+  count = "${var.regional_cluster ||  var.nat_enabled ? 0 : 1 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -30,7 +30,7 @@ resource "google_container_cluster" "primary" {
 
 resource "google_container_cluster" "primary-regional" {
   name  = "${var.name}"
-  count = "${var.regional_cluster ? 1 : 0 }"
+  count = "${var.regional_cluster && !var.nat_enabled  ? 1 : 0 }"
 
   region = "${var.region}"
 
@@ -40,6 +40,76 @@ resource "google_container_cluster" "primary-regional" {
   network    = "${var.network == "" ? terraform.workspace : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
+    services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
+  }
+
+  additional_zones = [
+    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
+  ]
+
+  lifecycle {
+    ignore_changes = ["subnetwork"]
+  }
+
+  initial_node_count       = 1
+  remove_default_node_pool = true
+}
+
+resource "google_container_cluster" "primary-nat" {
+  name = "${var.name}"
+
+  zone  = "${var.region}-${var.zones[0]}"
+  count = "${!var.regional_cluster && var.nat_enabled  ? 1 : 0 }"
+
+  min_master_version = "${var.min_master_version}"
+  enable_legacy_abac = false
+
+  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
+  project    = "${var.project}"
+
+  private_cluster_config {
+    enable_private_nodes    = "true"
+    enable_private_endpoint = "true"
+  }
+
+  ip_allocation_policy {
+    cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
+    services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
+  }
+
+  additional_zones = [
+    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
+  ]
+
+  lifecycle {
+    ignore_changes = ["subnetwork"]
+  }
+
+  initial_node_count       = 1
+  remove_default_node_pool = true
+}
+
+resource "google_container_cluster" "primary-regional-nat" {
+  name  = "${var.name}"
+  count = "${var.regional_cluster && var.nat_enabled ? 1 : 0 }"
+
+  region = "${var.region}"
+
+  min_master_version = "${var.min_master_version}"
+  enable_legacy_abac = false
+
+  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
+  project    = "${var.project}"
+
+  private_cluster_config {
+    enable_private_nodes    = "true"
+    enable_private_endpoint = "true"
+  }
 
   ip_allocation_policy {
     cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
