@@ -17,6 +17,8 @@ Table of contents
          * [add nat module (optional)](#add-nat-module-optional)
          * [using an existing or creating a new vpc network](#using-an-existing-or-creating-a-new-vpc-network)
          * [subnetworks](#subnetworks)
+         * [zonal and regional clusters](#zonal-and-regional-clusters)
+         * [cloud nat](#cloud-nat)
       * [3. Authors](#3-authors)
       * [4. License](#4-license)
       * [4. Acknowledgments](#4-acknowledgments)
@@ -149,11 +151,29 @@ Variable "network" is controling network creation.
 
 ### subnetworks
 
-Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`.
+Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`. If you already have a subnetwork and you would like to keep the name - please define the "subnetwork_name" variable.
 
 - we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask
 - we define kubernetes pods CIDR using `nodes_subnet_container_ip_cidr_range` variable
 - we define kubernetes service CIDR using `nodes_subnet_service_ip_cidr_range` variable
+
+### zonal and regional clusters
+
+- Zonal clusters: 
+A zonal cluster runs in one or more compute zones within a region. A multi-zone cluster runs its nodes across two or more compute zones within a single region. Zonal clusters run a single cluster master.
+- Regional cluster:
+A regional cluster runs three cluster masters across three compute zones, and runs nodes in two or more compute zones.
+
+Regional clusters are still in beta, please use with caution. You can enable it by setting variable "regional_cluster" to true.
+**Warning - possible data loss!** - changing this setting on a running cluster will force you to recreate it. 
+
+
+### cloud nat
+
+You can configure your cluster to sit behind nat, and have the same static external IP shared between pods. You can enable it by setting variable "nat_enabled" to true
+
+**Warning - possible data loss!** - changing this setting on a running cluster will force you to recreate it. 
+
 
 ## 3. Authors
 
