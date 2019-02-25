@@ -41,12 +41,6 @@ resource "google_container_cluster" "primary-regional" {
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
-  private_cluster_config {
-    enable_private_nodes    = "false"
-    enable_private_endpoint = "false"
-    master_ipv4_cidr_block  = "${var.master_subnet_ip_cidr_range}"
-  }
-
   ip_allocation_policy {
     cluster_secondary_range_name  = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.0.range_name}"
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
@@ -78,7 +72,16 @@ resource "google_container_cluster" "primary-nat" {
   project    = "${var.project}"
 
   private_cluster_config {
-    master_ipv4_cidr_block = "${var.master_subnet_ip_cidr_range}"
+    enable_private_nodes    = "true"
+    enable_private_endpoint = "false"
+    master_ipv4_cidr_block  = "${var.master_subnet_ip_cidr_range}"
+  }
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block   = "0.0.0.0/0"
+      display_name = "world"
+    }
   }
 
   ip_allocation_policy {
@@ -113,8 +116,15 @@ resource "google_container_cluster" "primary-regional-nat" {
 
   private_cluster_config {
     enable_private_nodes    = "true"
-    enable_private_endpoint = "true"
+    enable_private_endpoint = "false"
     master_ipv4_cidr_block  = "${var.master_subnet_ip_cidr_range}"
+  }
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block   = "0.0.0.0/0"
+      display_name = "world"
+    }
   }
 
   ip_allocation_policy {
@@ -136,7 +146,7 @@ resource "google_container_cluster" "primary-regional-nat" {
 
 module "node-pool" {
   source           = "./modules/kubernetes_node_pools"
-  region           = "${coalesce(var.region, join("",google_container_cluster.primary-regional.*.region))}"
+  region           = "${coalesce(replace(join("",google_container_cluster.primary.*.zone), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.zone), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.region), join("",google_container_cluster.primary-regional-nat.*.region))}"
   zones            = ["${var.zones}"]
   project          = "${var.project}"
   environment      = "${terraform.workspace}"
