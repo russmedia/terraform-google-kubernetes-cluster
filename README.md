@@ -38,7 +38,7 @@ Table of contents
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "2.0.0"
+  version                = "1.7.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -54,7 +54,7 @@ module "primary-cluster" {
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "2.0.0"
+  version                = "1.7.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -73,7 +73,7 @@ node_pools = [
     initial_node_count  = 1
     min_node_count      = 1
     max_node_count      = 3
-    version             = "1.10.7-gke.6"
+    version             = "1.11.7-gke.6"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
@@ -99,7 +99,7 @@ resource "google_compute_network" "default" {
 module "primary-cluster" {
   name        = "primary-cluster"
   source      = "russmedia/kubernetes-cluster/google"
-  version     = "2.0.0"
+  version     = "1.7.0"
   region      = "${var.google_region}"
   zones       = "${var.google_zones}"
   project     = "${var.project}"
@@ -112,7 +112,7 @@ module "primary-cluster" {
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
   source                               = "russmedia/kubernetes-cluster/google"
-  version                              = "2.0.0"
+  version                              = "1.7.0"
   region                               = "${var.google_region}"
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
