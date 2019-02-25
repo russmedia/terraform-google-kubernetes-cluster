@@ -190,7 +190,7 @@ resource "google_compute_router" "router" {
   count   = "${var.nat_enabled ? 1 : 0}"
   name    = "router"
   region  = "${var.region}"
-  network = "${var.network == "" ? google_compute_network.default.name : var.network}"
+  network = "${var.network == "" ? element(concat(google_compute_network.default.*.name, list("")), count.index) : var.network}"
 }
 
 resource "google_compute_address" "address" {
