@@ -7,7 +7,7 @@ sudo: required
 language: bash
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_7748a1005700_key -iv $encrypted_7748a1005700_iv -in sa-gcp.json.enc -out sa-gcp.json -d
+  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_iv -in sa-gcp.json.enc -out sa-gcp.json -d
   - wget https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip -O /tmp/terraform.zip 
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
   - if [ ! -d $HOME/google-cloud-sdk/bin ]; then
