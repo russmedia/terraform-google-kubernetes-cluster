@@ -1,1 +1,4 @@
 .terraform
+terraform*
+.plan
+sa-gcp.json
