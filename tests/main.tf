@@ -2,9 +2,9 @@ module "primary-cluster" {
   name = "primary-cluster"
 
   source = "../."
-  region = "${var.google_region}"
+  region = "${var.region}"
 
-  zones       = "${var.google_zones}"
+  zones       = "${var.zones}"
   project     = "${var.project}"
   environment = "${terraform.workspace}"
 

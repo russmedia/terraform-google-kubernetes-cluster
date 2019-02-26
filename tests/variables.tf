@@ -1,5 +1,7 @@
-variable "google_region" {}
+variable "region" {}
 
-variable "google_zones" {}
+variable "zones" {
+  type = "list"
+}
 
 variable project {}
