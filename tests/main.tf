@@ -9,7 +9,7 @@ module "primary-cluster" {
   environment = "${terraform.workspace}"
 
   min_master_version = "1.11.7-gke.6"
-  network = "${google_compute_network.main.name}"
+  network            = "${google_compute_network.main.name}"
 }
 
 resource "google_compute_network" "main" {
