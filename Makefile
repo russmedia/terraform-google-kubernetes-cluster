@@ -6,6 +6,7 @@ test_dir=tests
 default: validate
 
 init:
+	rm -rf .terraform
 	@for m in $(modules); do (terraform init $$m); done
 
 validate: init
