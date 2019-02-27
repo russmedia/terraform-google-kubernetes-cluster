@@ -17,8 +17,7 @@ cache:
   directories:
   - "$HOME/google-cloud-sdk/"
 script:
-- gcloud auth activate-service-account travis-terraform-tests@fleet-goal-232910.iam.gserviceaccount.com
-  --key-file=sa-gcp.json
+- gcloud auth activate-service-account travis-terraform-tests@fleet-goal-232910.iam.gserviceaccount.com --key-file=sa-gcp.json
 - make fmt
 - make validate
 - make test
