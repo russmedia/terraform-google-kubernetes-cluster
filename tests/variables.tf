@@ -5,3 +5,4 @@ variable "zones" {
 }
 
 variable project {}
+variable kube_version {}
