@@ -29,18 +29,19 @@ module "primary-cluster-regional" {
   regional_cluster = true
 }
 
-module "primary-cluster-nat" {
-  name                                 = "primary-cluster-nat"
+module "primary-cluster-regional-nat" {
+  name                                 = "primary-cluster-regional-nat"
   source                               = "../."
   region                               = "${var.region}"
   zones                                = "${var.zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
   min_master_version                   = "${var.kube_version}"
-  master_subnet_ip_cidr_range          = "10.12.0.0/28"
-  nodes_subnet_ip_cidr_range           = "10.102.0.0/24"
-  nodes_subnet_container_ip_cidr_range = "172.22.0.0/16"
-  nodes_subnet_service_ip_cidr_range   = "10.202.0.0/16"
+  network                              = "${google_compute_network.main.name}"
+  master_subnet_ip_cidr_range          = "10.13.0.0/28"
+  nodes_subnet_ip_cidr_range           = "10.103.0.0/24"
+  nodes_subnet_container_ip_cidr_range = "172.23.0.0/16"
+  nodes_subnet_service_ip_cidr_range   = "10.203.0.0/16"
 
   #test with defined node pool
   node_pools = [
@@ -56,24 +57,6 @@ module "primary-cluster-nat" {
       tags               = "additional-pool worker"
     },
   ]
-
-  # this cluster is testing nat setup
-  nat_enabled = true
-}
-
-module "primary-cluster-regional-nat" {
-  name                                 = "primary-cluster-regional-nat"
-  source                               = "../."
-  region                               = "${var.region}"
-  zones                                = "${var.zones}"
-  project                              = "${var.project}"
-  environment                          = "${terraform.workspace}"
-  min_master_version                   = "${var.kube_version}"
-  network                              = "${google_compute_network.main.name}"
-  master_subnet_ip_cidr_range          = "10.13.0.0/28"
-  nodes_subnet_ip_cidr_range           = "10.103.0.0/24"
-  nodes_subnet_container_ip_cidr_range = "172.23.0.0/16"
-  nodes_subnet_service_ip_cidr_range   = "10.203.0.0/16"
 
   # this cluster is testing regional setup behind nat
   regional_cluster = true
