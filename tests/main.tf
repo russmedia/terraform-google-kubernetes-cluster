@@ -14,8 +14,8 @@ module "primary-cluster" {
 module "primary-cluster-regional" {
   name                                 = "primary-cluster-regional"
   source                               = "../."
-  region                               = "${var.google_region}"
-  zones                                = "${var.google_zones}"
+  region                               = "${var.region}"
+  zones                                = "${var.zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
   min_master_version                   = "${var.kube_version}"
@@ -32,8 +32,8 @@ module "primary-cluster-regional" {
 module "primary-cluster-nat" {
   name                                 = "primary-cluster-nat"
   source                               = "../."
-  region                               = "${var.google_region}"
-  zones                                = "${var.google_zones}"
+  region                               = "${var.region}"
+  zones                                = "${var.zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
   min_master_version                   = "${var.kube_version}"
@@ -64,8 +64,8 @@ module "primary-cluster-nat" {
 module "primary-cluster-regional-nat" {
   name                                 = "primary-cluster-regional-nat"
   source                               = "../."
-  region                               = "${var.google_region}"
-  zones                                = "${var.google_zones}"
+  region                               = "${var.region}"
+  zones                                = "${var.zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
   min_master_version                   = "${var.kube_version}"
