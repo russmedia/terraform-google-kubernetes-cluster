@@ -16,6 +16,21 @@ EOF
   default = ""
 }
 
+variable "subnetwork_name" {
+  description = <<EOF
+  Subnetwork to create the cluster in 
+    - module will create a subnetwork based on terraform workspace and cluster name if this variable is empty
+    - if we define a network here it needs to have uniqe name 
+EOF
+
+  default = ""
+}
+
+variable "nat_enabled" {
+  description = "Enable Cloud Nat Module for cluster"
+  default     = false
+}
+
 variable "region" {
   description = "Kubernetes cluster region"
 }
@@ -25,6 +40,11 @@ variable "zones" {
   description = "Zones for Kubernetes workers"
 }
 
+variable "regional_cluster" {
+  default     = false
+  description = "Set to `true` to create regional cluster"
+}
+
 variable "environment" {
   description = "Environment label"
 }
@@ -32,6 +52,11 @@ variable "environment" {
 variable "min_master_version" {
   default     = ""
   description = "Kubernetes master version"
+}
+
+variable "master_subnet_ip_cidr_range" {
+  default     = "10.10.0.0/28"
+  description = "Cidr range for Kubernetes masters - needed for regional clusters"
 }
 
 variable "nodes_subnet_ip_cidr_range" {
