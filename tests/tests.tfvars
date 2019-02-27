@@ -1,9 +1,9 @@
 name = "test"
 
-project = "test-project"
+project = "fleet-goal-232910"
 
 region = "europe-west1"
 
 zones = ["b", "c"]
 
-environment = "test-environment"
+environment = "test"
