@@ -40,7 +40,7 @@ Table of contents
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "1.7.0"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -56,7 +56,7 @@ module "primary-cluster" {
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "1.7.0"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -101,7 +101,7 @@ resource "google_compute_network" "default" {
 module "primary-cluster" {
   name        = "primary-cluster"
   source      = "russmedia/kubernetes-cluster/google"
-  version     = "1.7.0"
+  version     = "2.0.0"
   region      = "${var.google_region}"
   zones       = "${var.google_zones}"
   project     = "${var.project}"
@@ -114,7 +114,7 @@ module "primary-cluster" {
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
   source                               = "russmedia/kubernetes-cluster/google"
-  version                              = "1.7.0"
+  version                              = "2.0.0"
   region                               = "${var.google_region}"
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
