@@ -157,12 +157,13 @@ module "node-pool" {
 
 resource "google_compute_network" "default" {
   count                   = "${var.network == "" || var.keep_network ? 1 : 0}"
-  name                    = "${terraform.workspace}-${var.name}"
+  name                    = "${var.network == "" ? local.network_name : var.network}"
   auto_create_subnetworks = "false"
   project                 = "${var.project}"
 }
 
 locals {
+  network_name    = "${terraform.workspace}-${var.name}"
   subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
 }
 
