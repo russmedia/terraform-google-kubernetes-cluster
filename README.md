@@ -19,9 +19,10 @@ Table of contents
          * [subnetworks](#subnetworks)
          * [zonal and regional clusters](#zonal-and-regional-clusters)
          * [cloud nat](#cloud-nat)
-      * [3. Authors](#3-authors)
-      * [4. License](#4-license)
-      * [4. Acknowledgments](#4-acknowledgments)
+      * [3. Migration from 1.x to 2.x ](#3-migration)
+      * [5. Authors](#4-authors)
+      * [6. License](#5-license)
+      * [7. Acknowledgments](#6-acknowledgments)
 
 
 
@@ -174,8 +175,20 @@ You can configure your cluster to sit behind nat, and have the same static exter
 
 **Warning - possible data loss!** - changing this setting on a running cluster will force you to recreate it. 
 
+## 3. Migration
 
-## 3. Authors
+To migrate from `1.x.x` module version to `2.x.x` follow these steps:
+
+- Remove `tags` property -> it is included now in `node_pools` map.
+- Remove `node_version` property -> it is included now in `node_pools` map.
+- Add `initial_node_count` to all node pools -> changing the previous value will recreate the node pool.
+- Add `network` with existing network name.
+- Add `subnetwork_name` with existing subnetwork name.
+- Add `use_existing_terraform_network` set to `true` if network was created by this module.
+
+Important note: when upgrading, default pool will be deleted. Before migration, please extend size of non-default pools to be able to schedule all applications without the default node pool.
+
+## 4. Authors
 
 - [Eryk Zalejski](https://github.com/ezalejski)
 
@@ -183,11 +196,11 @@ You can configure your cluster to sit behind nat, and have the same static exter
 
 - [Christoph Rosse](https://github.com/gries)
 
-## 4. License
+## 5. License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 Copyright (c) 2018 Russmedia GmbH.
 
-## 4. Acknowledgments
+## 6. Acknowledgments
 
 - [Konrad Černý](https://github.com/rokerkony)
