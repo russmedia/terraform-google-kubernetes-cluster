@@ -6,6 +6,11 @@ variable "project" {
   description = "Google Cloud project name"
 }
 
+variable "keep_network" {
+  description = "set to true if you are upgrading from older versions and you would like to keep the current network"
+  default     = false
+}
+
 variable "network" {
   description = <<EOF
   Network to create the cluster in 
