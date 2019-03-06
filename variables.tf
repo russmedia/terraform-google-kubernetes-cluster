@@ -6,6 +6,11 @@ variable "project" {
   description = "Google Cloud project name"
 }
 
+variable "use_existing_terraform_network" {
+  description = "set to true if you are upgrading from older versions and you would like to keep the network created by terraform"
+  default     = false
+}
+
 variable "network" {
   description = <<EOF
   Network to create the cluster in 
@@ -14,6 +19,21 @@ variable "network" {
 EOF
 
   default = ""
+}
+
+variable "subnetwork_name" {
+  description = <<EOF
+  Subnetwork to create the cluster in 
+    - module will create a subnetwork based on terraform workspace and cluster name if this variable is empty
+    - if we define a network here it needs to have uniqe name 
+EOF
+
+  default = ""
+}
+
+variable "nat_enabled" {
+  description = "Enable Cloud Nat Module for cluster"
+  default     = false
 }
 
 variable "region" {
@@ -25,6 +45,11 @@ variable "zones" {
   description = "Zones for Kubernetes workers"
 }
 
+variable "regional_cluster" {
+  default     = false
+  description = "Set to `true` to create regional cluster"
+}
+
 variable "environment" {
   description = "Environment label"
 }
@@ -32,6 +57,11 @@ variable "environment" {
 variable "min_master_version" {
   default     = ""
   description = "Kubernetes master version"
+}
+
+variable "master_subnet_ip_cidr_range" {
+  default     = "10.10.0.0/28"
+  description = "Cidr range for Kubernetes masters - needed for regional clusters"
 }
 
 variable "nodes_subnet_ip_cidr_range" {

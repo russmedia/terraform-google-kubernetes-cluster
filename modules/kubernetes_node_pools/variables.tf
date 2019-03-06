@@ -7,7 +7,7 @@ variable "node_pools" {
       initial_node_count = 1
       min_node_count     = 1
       max_node_count     = 1
-      version            = "1.10.7-gke.6"
+      version            = ""
       image_type         = "COS"
       machine_type       = "n1-standard-1"
       preemptible        = false
@@ -49,4 +49,9 @@ variable "environment" {
 variable "cluster_name" {
   default     = ""
   description = "Kubernetes cluster name"
+}
+
+variable "regional_cluster" {
+  default     = false
+  description = "Set to `true` to create node pool for regional cluster."
 }

@@ -17,9 +17,12 @@ Table of contents
          * [add nat module (optional)](#add-nat-module-optional)
          * [using an existing or creating a new vpc network](#using-an-existing-or-creating-a-new-vpc-network)
          * [subnetworks](#subnetworks)
-      * [3. Authors](#3-authors)
-      * [4. License](#4-license)
-      * [4. Acknowledgments](#4-acknowledgments)
+         * [zonal and regional clusters](#zonal-and-regional-clusters)
+         * [cloud nat](#cloud-nat)
+      * [3. Migration from 1.x to 2.x ](#3-migration)
+      * [5. Authors](#4-authors)
+      * [6. License](#5-license)
+      * [7. Acknowledgments](#6-acknowledgments)
 
 
 
@@ -37,7 +40,8 @@ Table of contents
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                 = "russmedia/kubernetes-cluster/google"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -52,7 +56,8 @@ module "primary-cluster" {
 ```hcl
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
-  source                 = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                 = "russmedia/kubernetes-cluster/google"
+  version                = "2.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -71,7 +76,7 @@ node_pools = [
     initial_node_count  = 1
     min_node_count      = 1
     max_node_count      = 3
-    version             = "1.10.7-gke.6"
+    version             = "1.11.7-gke.6"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
@@ -96,7 +101,8 @@ resource "google_compute_network" "default" {
 ```hcl
 module "primary-cluster" {
   name        = "primary-cluster"
-  source      = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source      = "russmedia/kubernetes-cluster/google"
+  version     = "2.0.0"
   region      = "${var.google_region}"
   zones       = "${var.google_zones}"
   project     = "${var.project}"
@@ -108,7 +114,8 @@ module "primary-cluster" {
 ```hcl
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
-  source                               = "github.com/russmedia/terraform-google-kubernetes-cluster?ref=1.6.0"
+  source                               = "russmedia/kubernetes-cluster/google"
+  version                              = "2.0.0"
   region                               = "${var.google_region}"
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
@@ -145,13 +152,43 @@ Variable "network" is controling network creation.
 
 ### subnetworks
 
-Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`.
+Terraform always creates a subnetwork. The subnetwork name is taken from a pattern: `${terraform.workspace}-${var.name}-nodes-subnet`. If you already have a subnetwork and you would like to keep the name - please define the "subnetwork_name" variable.
 
 - we define a subnetwork nodes CIDR using `nodes_subnet_ip_cidr_range` variable - terraform will fail with conflict if you use existing netmask
 - we define kubernetes pods CIDR using `nodes_subnet_container_ip_cidr_range` variable
 - we define kubernetes service CIDR using `nodes_subnet_service_ip_cidr_range` variable
 
-## 3. Authors
+### zonal and regional clusters
+
+- Zonal clusters: 
+A zonal cluster runs in one or more compute zones within a region. A multi-zone cluster runs its nodes across two or more compute zones within a single region. Zonal clusters run a single cluster master.
+- Regional cluster:
+A regional cluster runs three cluster masters across three compute zones, and runs nodes in two or more compute zones.
+
+Regional clusters are still in beta, please use with caution. You can enable it by setting variable "regional_cluster" to true.
+**Warning - possible data loss!** - changing this setting on a running cluster will force you to recreate it. 
+
+
+### cloud nat
+
+You can configure your cluster to sit behind nat, and have the same static external IP shared between pods. You can enable it by setting variable "nat_enabled" to true
+
+**Warning - possible data loss!** - changing this setting on a running cluster will force you to recreate it. 
+
+## 3. Migration
+
+To migrate from `1.x.x` module version to `2.x.x` follow these steps:
+
+- Remove `tags` property -> it is included now in `node_pools` map.
+- Remove `node_version` property -> it is included now in `node_pools` map.
+- Add `initial_node_count` to all node pools -> changing the previous value will recreate the node pool.
+- Add `network` with existing network name.
+- Add `subnetwork_name` with existing subnetwork name.
+- Add `use_existing_terraform_network` set to `true` if network was created by this module.
+
+Important note: when upgrading, default pool will be deleted. Before migration, please extend size of non-default pools to be able to schedule all applications without the default node pool.
+
+## 4. Authors
 
 - [Eryk Zalejski](https://github.com/ezalejski)
 
@@ -159,11 +196,11 @@ Terraform always creates a subnetwork. The subnetwork name is taken from a patte
 
 - [Christoph Rosse](https://github.com/gries)
 
-## 4. License
+## 5. License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.
 Copyright (c) 2018 Russmedia GmbH.
 
-## 4. Acknowledgments
+## 6. Acknowledgments
 
 - [Konrad Černý](https://github.com/rokerkony)
