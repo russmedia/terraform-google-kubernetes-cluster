@@ -8,6 +8,7 @@ Table of contents
 =================
 
    * [Overview](#overview)
+   * [Requirements](#requirements)
    * [Table of contents](#table-of-contents)
       * [1. Features](#1-features)
       * [2. Usage](#2-usage)
@@ -24,7 +25,8 @@ Table of contents
       * [6. License](#5-license)
       * [7. Acknowledgments](#6-acknowledgments)
 
-
+# Requirements
+Please use google provider version = "~> 2.3"
 
 ## 1. Features
 
