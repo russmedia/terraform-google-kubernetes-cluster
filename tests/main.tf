@@ -12,15 +12,18 @@ module "primary-cluster" {
 }
 
 module "primary-cluster-regional" {
-  name                                 = "primary-cluster-regional"
-  source                               = "../."
-  region                               = "${var.region}"
-  zones                                = "${var.zones}"
-  project                              = "${var.project}"
-  environment                          = "${terraform.workspace}"
-  min_master_version                   = "${var.kube_version}"
-  network                              = "${google_compute_network.main.name}"
-  master_subnet_ip_cidr_range          = "10.11.0.0/28"
+  name               = "primary-cluster-regional"
+  source             = "../."
+  region             = "${var.region}"
+  zones              = "${var.zones}"
+  project            = "${var.project}"
+  environment        = "${terraform.workspace}"
+  min_master_version = "${var.kube_version}"
+
+  # this cluster is creating its own  network
+  # network = "${google_compute_network.main.name}"
+  master_subnet_ip_cidr_range = "10.11.0.0/28"
+
   nodes_subnet_ip_cidr_range           = "10.101.0.0/24"
   nodes_subnet_container_ip_cidr_range = "172.21.0.0/16"
   nodes_subnet_service_ip_cidr_range   = "10.201.0.0/16"
