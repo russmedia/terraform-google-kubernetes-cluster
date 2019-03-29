@@ -16,7 +16,7 @@ resource "google_container_cluster" "primary" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -32,7 +32,7 @@ resource "google_container_cluster" "primary-regional" {
   name  = "${var.name}"
   count = "${var.regional_cluster && !var.nat_enabled  ? 1 : 0 }"
 
-  region = "${var.region}"
+  location = "${var.region}"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -46,7 +46,7 @@ resource "google_container_cluster" "primary-regional" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -89,7 +89,7 @@ resource "google_container_cluster" "primary-nat" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -105,7 +105,7 @@ resource "google_container_cluster" "primary-regional-nat" {
   name  = "${var.name}"
   count = "${var.regional_cluster && var.nat_enabled ? 1 : 0 }"
 
-  region = "${var.region}"
+  location = "${var.region}"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -132,7 +132,7 @@ resource "google_container_cluster" "primary-regional-nat" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -195,9 +195,9 @@ resource "google_compute_router" "router" {
 }
 
 resource "google_compute_address" "address" {
-  count  = "${var.nat_enabled ? 1 : 0}"
-  name   = "${terraform.workspace}-${var.name}-nat-external-address"
-  region = "${var.region}"
+  count    = "${var.nat_enabled ? 1 : 0}"
+  name     = "${terraform.workspace}-${var.name}-nat-external-address"
+  location = "${var.region}"
 }
 
 resource "google_compute_router_nat" "advanced-nat" {
