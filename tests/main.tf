@@ -1,24 +1,22 @@
 module "primary-cluster" {
-  name               = "primary-cluster"
-  source             = "../."
-  region             = "${var.region}"
-  zones              = "${var.zones}"
-  project            = "${var.project}"
-  environment        = "${terraform.workspace}"
-  min_master_version = "${var.kube_version}"
+  name        = "primary-cluster"
+  source      = "../."
+  region      = "${var.region}"
+  zones       = "${var.zones}"
+  project     = "${var.project}"
+  environment = "${terraform.workspace}"
 
   # this cluster is testing existing network
   network = "${google_compute_network.main.name}"
 }
 
 module "primary-cluster-regional" {
-  name               = "primary-cluster-regional"
-  source             = "../."
-  region             = "${var.region}"
-  zones              = "${var.zones}"
-  project            = "${var.project}"
-  environment        = "${terraform.workspace}"
-  min_master_version = "${var.kube_version}"
+  name        = "primary-cluster-regional"
+  source      = "../."
+  region      = "${var.region}"
+  zones       = "${var.zones}"
+  project     = "${var.project}"
+  environment = "${terraform.workspace}"
 
   # this cluster is creating its own  network
   # network = "${google_compute_network.main.name}"
@@ -39,7 +37,6 @@ module "primary-cluster-regional-nat" {
   zones                                = "${var.zones}"
   project                              = "${var.project}"
   environment                          = "${terraform.workspace}"
-  min_master_version                   = "${var.kube_version}"
   network                              = "${google_compute_network.main.name}"
   master_subnet_ip_cidr_range          = "10.13.0.0/28"
   nodes_subnet_ip_cidr_range           = "10.103.0.0/24"

@@ -1,8 +1,8 @@
 resource "google_container_cluster" "primary" {
   name = "${var.name}"
 
-  zone  = "${var.region}-${var.zones[0]}"
-  count = "${var.regional_cluster ||  var.nat_enabled ? 0 : 1 }"
+  location = "${var.region}-${var.zones[0]}"
+  count    = "${var.regional_cluster ||  var.nat_enabled ? 0 : 1 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
@@ -61,8 +61,8 @@ resource "google_container_cluster" "primary-regional" {
 resource "google_container_cluster" "primary-nat" {
   name = "${var.name}"
 
-  zone  = "${var.region}-${var.zones[0]}"
-  count = "${!var.regional_cluster && var.nat_enabled  ? 1 : 0 }"
+  location = "${var.region}-${var.zones[0]}"
+  count    = "${!var.regional_cluster && var.nat_enabled  ? 1 : 0 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
