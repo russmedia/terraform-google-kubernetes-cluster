@@ -7,7 +7,7 @@ resource "google_container_cluster" "primary" {
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -37,7 +37,7 @@ resource "google_container_cluster" "primary-regional" {
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -67,7 +67,7 @@ resource "google_container_cluster" "primary-nat" {
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -110,7 +110,7 @@ resource "google_container_cluster" "primary-regional-nat" {
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -172,7 +172,7 @@ resource "google_compute_subnetwork" "nodes-subnet" {
   depends_on    = ["google_compute_network.default"]
   name          = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
   ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
-  network       = "${var.network == "" ? terraform.workspace : var.network}"
+  network       = "${var.network == "" ? local.network_name : var.network}"
   region        = "${var.region}"
   project       = "${var.project}"
 
