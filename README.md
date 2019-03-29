@@ -47,8 +47,7 @@ module "primary-cluster" {
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
-  environment            = "${terraform.workspace}"
-  tags                   = ["nat-${terraform.workspace}"]
+  environment            = "${terraform.workspace}" 
   min_master_version     = "${var.master_version}"
 }
 ```
