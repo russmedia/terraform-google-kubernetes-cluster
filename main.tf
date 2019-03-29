@@ -195,9 +195,9 @@ resource "google_compute_router" "router" {
 }
 
 resource "google_compute_address" "address" {
-  count    = "${var.nat_enabled ? 1 : 0}"
-  name     = "${terraform.workspace}-${var.name}-nat-external-address"
-  location = "${var.region}"
+  count  = "${var.nat_enabled ? 1 : 0}"
+  name   = "${terraform.workspace}-${var.name}-nat-external-address"
+  region = "${var.region}"
 }
 
 resource "google_compute_router_nat" "advanced-nat" {
