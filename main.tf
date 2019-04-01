@@ -1,3 +1,8 @@
+locals {
+  network_name    = "${terraform.workspace}-${var.name}"
+  subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
+}
+
 resource "google_container_cluster" "primary" {
   name = "${var.name}"
 
@@ -160,11 +165,6 @@ resource "google_compute_network" "default" {
   name                    = "${var.network == "" ? local.network_name : var.network}"
   auto_create_subnetworks = "false"
   project                 = "${var.project}"
-}
-
-locals {
-  network_name    = "${terraform.workspace}-${var.name}"
-  subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
 }
 
 # Subnet for cluster nodes
