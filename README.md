@@ -28,6 +28,9 @@ Table of contents
 # Requirements
 Please use google provider version = "~> 2.3"
 
+If you need more control with versioning of your cluster, it is advised to specify "min_master_version" and "version" in node-pools. Otherwise GKE will be using default version which might change in near future.
+
+
 ## 1. Features
 
 - multiple node pools with node number multiplied by defined zones
