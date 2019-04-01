@@ -56,7 +56,7 @@ module "primary-cluster" {
 
 ```hcl
 module "primary-cluster" {
-  name                   = "${terraform.workspace}"
+  name                   = "my-cluster"
   source                 = "russmedia/kubernetes-cluster/google"
   version                = "2.0.0"
   region                 = "${var.google_region}"
