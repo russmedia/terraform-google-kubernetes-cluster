@@ -1,9 +1,9 @@
 resource "google_container_node_pool" "node_pool" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
   count              = "${var.regional_cluster ? 0 :  length(var.node_pools)  }"
-  zone               = "${var.region}-${var.zones[0]}"
+  location           = "${var.region}-${var.zones[0]}"
   cluster            = "${var.cluster_name}"
-  version            = "${lookup(var.node_pools[count.index], "version")}"
+  version            = "${lookup(var.node_pools[count.index], "version", "")}"
   project            = "${var.project}"
   initial_node_count = "${lookup(var.node_pools[count.index], "initial_node_count")}"
 
@@ -35,7 +35,7 @@ resource "google_container_node_pool" "node_pool" {
 resource "google_container_node_pool" "node_pool_regional" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
   count              = "${var.regional_cluster ? length(var.node_pools) : 0 }"
-  region             = "${var.region}"
+  location           = "${var.region}"
   cluster            = "${var.cluster_name}"
   version            = "${lookup(var.node_pools[count.index], "version")}"
   project            = "${var.project}"

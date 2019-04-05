@@ -1,13 +1,18 @@
+locals {
+  network_name    = "${terraform.workspace}-${var.name}"
+  subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
+}
+
 resource "google_container_cluster" "primary" {
   name = "${var.name}"
 
-  zone  = "${var.region}-${var.zones[0]}"
-  count = "${var.regional_cluster ||  var.nat_enabled ? 0 : 1 }"
+  location = "${var.region}-${var.zones[0]}"
+  count    = "${var.regional_cluster ||  var.nat_enabled ? 0 : 1 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -16,7 +21,7 @@ resource "google_container_cluster" "primary" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -32,12 +37,12 @@ resource "google_container_cluster" "primary-regional" {
   name  = "${var.name}"
   count = "${var.regional_cluster && !var.nat_enabled  ? 1 : 0 }"
 
-  region = "${var.region}"
+  location = "${var.region}"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -46,7 +51,7 @@ resource "google_container_cluster" "primary-regional" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -61,13 +66,13 @@ resource "google_container_cluster" "primary-regional" {
 resource "google_container_cluster" "primary-nat" {
   name = "${var.name}"
 
-  zone  = "${var.region}-${var.zones[0]}"
-  count = "${!var.regional_cluster && var.nat_enabled  ? 1 : 0 }"
+  location = "${var.region}-${var.zones[0]}"
+  count    = "${!var.regional_cluster && var.nat_enabled  ? 1 : 0 }"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -89,7 +94,7 @@ resource "google_container_cluster" "primary-nat" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -105,12 +110,12 @@ resource "google_container_cluster" "primary-regional-nat" {
   name  = "${var.name}"
   count = "${var.regional_cluster && var.nat_enabled ? 1 : 0 }"
 
-  region = "${var.region}"
+  location = "${var.region}"
 
   min_master_version = "${var.min_master_version}"
   enable_legacy_abac = false
 
-  network    = "${var.network == "" ? terraform.workspace : var.network}"
+  network    = "${var.network == "" ? local.network_name : var.network}"
   subnetwork = "${google_compute_subnetwork.nodes-subnet.self_link}"
   project    = "${var.project}"
 
@@ -132,7 +137,7 @@ resource "google_container_cluster" "primary-regional-nat" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  additional_zones = [
+  node_locations = [
     "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
@@ -162,17 +167,12 @@ resource "google_compute_network" "default" {
   project                 = "${var.project}"
 }
 
-locals {
-  network_name    = "${terraform.workspace}-${var.name}"
-  subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
-}
-
 # Subnet for cluster nodes
 resource "google_compute_subnetwork" "nodes-subnet" {
   depends_on    = ["google_compute_network.default"]
   name          = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
   ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
-  network       = "${var.network == "" ? terraform.workspace : var.network}"
+  network       = "${var.network == "" ? local.network_name : var.network}"
   region        = "${var.region}"
   project       = "${var.project}"
 

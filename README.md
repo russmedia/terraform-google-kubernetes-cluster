@@ -8,6 +8,7 @@ Table of contents
 =================
 
    * [Overview](#overview)
+   * [Requirements](#requirements)
    * [Table of contents](#table-of-contents)
       * [1. Features](#1-features)
       * [2. Usage](#2-usage)
@@ -24,6 +25,10 @@ Table of contents
       * [6. License](#5-license)
       * [7. Acknowledgments](#6-acknowledgments)
 
+# Requirements
+Please use google provider version = "~> 2.3"
+
+If you need more control with versioning of your cluster, it is advised to specify "min_master_version" and "version" in node-pools. Otherwise GKE will be using default version which might change in near future.
 
 
 ## 1. Features
@@ -45,8 +50,7 @@ module "primary-cluster" {
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
-  environment            = "${terraform.workspace}"
-  tags                   = ["nat-${terraform.workspace}"]
+  environment            = "${terraform.workspace}" 
   min_master_version     = "${var.master_version}"
 }
 ```
@@ -55,7 +59,7 @@ module "primary-cluster" {
 
 ```hcl
 module "primary-cluster" {
-  name                   = "${terraform.workspace}"
+  name                   = "my-cluster"
   source                 = "russmedia/kubernetes-cluster/google"
   version                = "2.0.0"
   region                 = "${var.google_region}"
@@ -76,7 +80,7 @@ node_pools = [
     initial_node_count  = 1
     min_node_count      = 1
     max_node_count      = 3
-    version             = "1.11.7-gke.6"
+    version             = "1.11.8-gke.4"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
