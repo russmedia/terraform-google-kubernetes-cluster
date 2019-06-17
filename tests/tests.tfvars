@@ -8,4 +8,4 @@ zones = ["b", "c"]
 
 environment = "test"
 
-kube_version = "1.11.8-gke.4"
+kube_version = "1.12.8-gke.6"

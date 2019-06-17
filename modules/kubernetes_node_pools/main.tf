@@ -4,7 +4,6 @@ locals {
   }
 }
 
-
 resource "google_container_node_pool" "node_pool" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
   count              = "${var.regional_cluster ? 0 :  length(var.node_pools)  }"

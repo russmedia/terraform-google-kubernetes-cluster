@@ -107,7 +107,7 @@ variable "node_pools" {
       - machine_type
       - preemptible [bool]
       - tags [space separated tags]
-      - custom_label_keys [space separated tags, must match the number of custom_label_values] 
-      - custom_label_values [space separated tags, must match the number of custom_label_keys] 
+      - custom_label_keys [space separated tags, must match the number of custom_label_values]
+      - custom_label_values [space separated tags, must match the number of custom_label_keys]
   EOF
 }
