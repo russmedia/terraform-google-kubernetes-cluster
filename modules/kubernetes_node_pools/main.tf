@@ -1,3 +1,9 @@
+locals {
+  default_labels = {
+    environment = "${var.environment}"
+  }
+}
+
 resource "google_container_node_pool" "node_pool" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
   count              = "${var.regional_cluster ? 0 :  length(var.node_pools)  }"
@@ -24,9 +30,7 @@ resource "google_container_node_pool" "node_pool" {
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
     image_type   = "${lookup(var.node_pools[count.index], "image_type")}"
 
-    labels {
-      environment = "${var.environment}"
-    }
+    labels = "${merge(local.default_labels, "${zipmap(split(" ",lookup(var.node_pools[count.index], "custom_label_keys", "environment")), split(" ", lookup(var.node_pools[count.index], "custom_label_values", "${var.environment}")))}")}"
 
     tags = "${split(" ", lookup(var.node_pools[count.index], "tags"))}"
   }
@@ -58,9 +62,7 @@ resource "google_container_node_pool" "node_pool_regional" {
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
     image_type   = "${lookup(var.node_pools[count.index], "image_type")}"
 
-    labels {
-      environment = "${var.environment}"
-    }
+    labels = "${merge(local.default_labels, "${zipmap(split(" ",lookup(var.node_pools[count.index], "custom_label_keys", "environment")), split(" ", lookup(var.node_pools[count.index], "custom_label_values", "${var.environment}")))}")}"
 
     tags = "${split(" ", lookup(var.node_pools[count.index], "tags"))}"
   }
