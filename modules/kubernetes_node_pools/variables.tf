@@ -12,6 +12,13 @@ variable "node_pools" {
       machine_type       = "n1-standard-1"
       preemptible        = false
       tags               = "additional-pool worker"
+
+      scopes = [
+        "https://www.googleapis.com/auth/compute",
+        "https://www.googleapis.com/auth/devstorage.read_only",
+        "https://www.googleapis.com/auth/logging.write",
+        "https://www.googleapis.com/auth/monitoring",
+      ]
     },
   ]
 
@@ -28,6 +35,7 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
+      - scopes [list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute]
   EOF
 }
 
