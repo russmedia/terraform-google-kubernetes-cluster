@@ -111,3 +111,14 @@ variable "node_pools" {
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
   EOF
 }
+
+variable "node_pools_scopes" {
+  default = [
+    "https://www.googleapis.com/auth/compute",
+    "https://www.googleapis.com/auth/devstorage.read_only",
+    "https://www.googleapis.com/auth/logging.write",
+    "https://www.googleapis.com/auth/monitoring",
+  ]
+
+  description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute]"
+}

@@ -19,7 +19,7 @@ resource "google_container_node_pool" "node_pool" {
   }
 
   node_config {
-    oauth_scopes = "${lookup(var.node_pools[count.index], "scopes")}"
+    oauth_scopes = "${var.node_pools_scopes}"
 
     preemptible  = "${lookup(var.node_pools[count.index], "preemptible")}"
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
@@ -46,7 +46,7 @@ resource "google_container_node_pool" "node_pool_regional" {
   }
 
   node_config {
-    oauth_scopes = "${lookup(var.node_pools[count.index], "scopes")}"
+    oauth_scopes = "${var.node_pools_scopes}"
 
     preemptible  = "${lookup(var.node_pools[count.index], "preemptible")}"
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
