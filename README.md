@@ -38,6 +38,7 @@ If you need more control with versioning of your cluster, it is advised to speci
 - node pools with preemptible instances
 - ip_allocation_policy for exposing nodes/services/pods in VPC
 - tested with NAT module
+- configurable node pools oauth scopes (global per all node pools)
 
 ## 2. Usage
 
@@ -126,7 +127,7 @@ module "secondary-cluster" {
   environment                          = "${terraform.workspace}"
   network                              = "${google_compute_network.default.name}"
   nodes_subnet_ip_cidr_range           = "10.101.0.0/24"
-  nodes_subnet_container_ip_cidr_range = "172.31.0.0/16"
+  nodes_subnet_container_ip_cidr_range = "172.21.0.0/16"
   nodes_subnet_service_ip_cidr_range   = "10.201.0.0/16"
 }
 ```

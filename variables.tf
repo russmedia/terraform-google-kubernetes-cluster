@@ -120,5 +120,5 @@ variable "node_pools_scopes" {
     "https://www.googleapis.com/auth/monitoring",
   ]
 
-  description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute]"
+  description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute], global per all node pools"
 }
