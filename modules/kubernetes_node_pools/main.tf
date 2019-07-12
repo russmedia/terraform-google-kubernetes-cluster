@@ -6,7 +6,7 @@ locals {
 
 resource "google_container_node_pool" "node_pool" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
-  count              = "${var.regional_cluster ? 0 :  length(var.node_pools)  }"
+  count              = "${var.regional_cluster ? 0 : length(var.node_pools)}"
   location           = "${var.region}-${var.zones[0]}"
   cluster            = "${var.cluster_name}"
   version            = "${lookup(var.node_pools[count.index], "version", "")}"
@@ -19,12 +19,7 @@ resource "google_container_node_pool" "node_pool" {
   }
 
   node_config {
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
+    oauth_scopes = "${var.node_pools_scopes}"
 
     preemptible  = "${lookup(var.node_pools[count.index], "preemptible")}"
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"
@@ -38,7 +33,7 @@ resource "google_container_node_pool" "node_pool" {
 
 resource "google_container_node_pool" "node_pool_regional" {
   name               = "${lookup(var.node_pools[count.index], "name")}"
-  count              = "${var.regional_cluster ? length(var.node_pools) : 0 }"
+  count              = "${var.regional_cluster ? length(var.node_pools) : 0}"
   location           = "${var.region}"
   cluster            = "${var.cluster_name}"
   version            = "${lookup(var.node_pools[count.index], "version")}"
@@ -51,12 +46,7 @@ resource "google_container_node_pool" "node_pool_regional" {
   }
 
   node_config {
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
-    ]
+    oauth_scopes = "${var.node_pools_scopes}"
 
     preemptible  = "${lookup(var.node_pools[count.index], "preemptible")}"
     machine_type = "${lookup(var.node_pools[count.index], "machine_type")}"

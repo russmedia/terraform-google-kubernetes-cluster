@@ -5,14 +5,15 @@ GKE Kubernetes node pools submodule
 
 ```hcl
 module "node-pool" {
-  source       = "./modules/kubernetes_node_pools"
-  node_version = "${var.node_version}"
-  region       = "${var.region}"
-  zones        = ["${var.zones}"]
-  project      = "${var.project}"
-  environment  = "${terraform.workspace}"
-  cluster_name = "${var.cluster_name}"
-  node_pools   = "${var.node_pools}"
+  source            = "./modules/kubernetes_node_pools"
+  node_version      = "${var.node_version}"
+  region            = "${var.region}"
+  zones             = ["${var.zones}"]
+  project           = "${var.project}"
+  environment       = "${terraform.workspace}"
+  cluster_name      = "${var.cluster_name}"
+  node_pools        = "${var.node_pools}"
+  node_pools_scopes = "${var.node_pools_scopes}"
 }
 ```
 
@@ -32,4 +33,13 @@ node_pools = [
     tags               = "additional-pool worker"
   },
 ]
+```
+and `node_pools_scopes` i.e.
+```hcl
+node_pools_scopes = [
+      "https://www.googleapis.com/auth/compute",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+  ]
 ```

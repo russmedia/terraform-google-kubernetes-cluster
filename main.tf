@@ -150,14 +150,15 @@ resource "google_container_cluster" "primary-regional-nat" {
 }
 
 module "node-pool" {
-  source           = "./modules/kubernetes_node_pools"
-  region           = "${coalesce(replace(join("",google_container_cluster.primary.*.zone), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.zone), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.region), join("",google_container_cluster.primary-regional-nat.*.region))}"
-  zones            = ["${var.zones}"]
-  project          = "${var.project}"
-  environment      = "${terraform.workspace}"
-  cluster_name     = "${var.name}"
-  node_pools       = "${var.node_pools}"
-  regional_cluster = "${var.regional_cluster}"
+  source            = "./modules/kubernetes_node_pools"
+  region            = "${coalesce(replace(join("",google_container_cluster.primary.*.zone), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.zone), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.region), join("",google_container_cluster.primary-regional-nat.*.region))}"
+  zones             = ["${var.zones}"]
+  project           = "${var.project}"
+  environment       = "${terraform.workspace}"
+  cluster_name      = "${var.name}"
+  node_pools        = "${var.node_pools}"
+  regional_cluster  = "${var.regional_cluster}"
+  node_pools_scopes = "${var.node_pools_scopes}"
 }
 
 resource "google_compute_network" "default" {

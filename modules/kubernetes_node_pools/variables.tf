@@ -31,6 +31,17 @@ variable "node_pools" {
   EOF
 }
 
+variable "node_pools_scopes" {
+  default = [
+    "https://www.googleapis.com/auth/compute",
+    "https://www.googleapis.com/auth/devstorage.read_only",
+    "https://www.googleapis.com/auth/logging.write",
+    "https://www.googleapis.com/auth/monitoring",
+  ]
+
+  description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute], global per all node pools"
+}
+
 variable "project" {
   description = "Google Cloud project name"
 }

@@ -74,6 +74,13 @@ module "primary-cluster-regional-nat" {
     },
   ]
 
+  node_pools_scopes = [
+    "https://www.googleapis.com/auth/compute",
+    "https://www.googleapis.com/auth/devstorage.read_only",
+    "https://www.googleapis.com/auth/logging.write",
+    "https://www.googleapis.com/auth/monitoring",
+  ]
+
   # this cluster is testing regional setup behind nat
   regional_cluster = true
   nat_enabled      = true
