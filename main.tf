@@ -170,12 +170,13 @@ resource "google_compute_network" "default" {
 
 # Subnet for cluster nodes
 resource "google_compute_subnetwork" "nodes-subnet" {
-  depends_on    = ["google_compute_network.default"]
-  name          = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
-  ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
-  network       = "${var.network == "" ? local.network_name : var.network}"
-  region        = "${var.region}"
-  project       = "${var.project}"
+  depends_on               = ["google_compute_network.default"]
+  name                     = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
+  ip_cidr_range            = "${var.nodes_subnet_ip_cidr_range}"
+  network                  = "${var.network == "" ? local.network_name : var.network}"
+  region                   = "${var.region}"
+  project                  = "${var.project}"
+  private_ip_google_access = "${var.nat_enabled ? true : false}"
 
   secondary_ip_range {
     range_name    = "${terraform.workspace}-container-range-1"
