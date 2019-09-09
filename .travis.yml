@@ -19,15 +19,9 @@ cache:
   directories:
     - "$HOME/google-cloud-sdk/"
 script:
-  - export GOOGLE_REGION="$(grep -r region tests/tests.tfvars | awk '{print $3}')"
-  - export GOOGLE_PROJECT="$(grep -r project tests/tests.tfvars | awk '{print $3}')"
   - gcloud auth activate-service-account travis-terraform-tests@fleet-goal-232910.iam.gserviceaccount.com --key-file=sa-gcp.json
   - make fmt
   - make validate
   - make test
-  - gcloud auth activate-service-account travis-terraform-tests@fleet-goal-232910.iam.gserviceaccount.com --key-file=sa-gcp.json
-  -  ### Connect to regional cluster behind nat.
-  - gcloud container clusters get-credentials primary-cluster-regional-nat --region $GOOGLE_REGION --project $GOOGLE_PROJECT
-  -  ### Test if pod nat IP equals cluster NAT IP
-  - test  "$(kubectl run -it --generator=run-pod/v1 curl --image appropriate/curl -- curl ifconfig.co 2>/dev/null)" ==  "gcloud compute addresses describe default-primary-cluster-regional-nat-nat-external-address --region $GOOGLE_REGION --project $GOOGLE_PROJECT | awk '{print $3}') |grep 'address:'| awk '{print $2}'"
+  - make nat_compare
   - make destroy
