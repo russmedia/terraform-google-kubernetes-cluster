@@ -1,6 +1,6 @@
 modules = $(shell find . -type f -name "*.tf" -exec dirname {} \;|sort -u)
-google_region = $(shell grep -r region tests/tests.tfvars | awk '{print $3}')
-google_project=$(shell grep -r project tests/tests.tfvars | awk '{print $3}')
+google_region = $(shell grep -r region tests/tests.tfvars | awk '{print $$3}')
+google_project = $(shell grep -r project tests/tests.tfvars | awk '{print $$3}')
 test_dir=tests
 
 .PHONY: test
