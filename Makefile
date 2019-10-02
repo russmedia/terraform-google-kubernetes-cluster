@@ -22,7 +22,7 @@ test: init
 	terraform apply ".plan"
 
 nat_verify: 
-    until [ "$$(gcloud container clusters describe primary-cluster-regional-nat --region $(google_region) --project $(google_project) --format='csv(status)' |grep RUNNING)" ]; do echo "Waiting for cluster to be ready" ; sleep 60; done
+	until [ `gcloud container clusters describe primary-cluster-regional-nat --region $(google_region) --project $(google_project) --format='csv(status)' |grep RUNNING` ]; do echo "Waiting for cluster to be ready" ; sleep 60; done
 	gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
 	gcloud components install kubectl -q
 	### compare actual external IP with google NAT IP
