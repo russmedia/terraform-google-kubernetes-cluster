@@ -23,5 +23,5 @@ script:
   - make fmt
   - make validate
   - make test
-  - make nat_compare
+  - make nat_verify
   - make destroy
