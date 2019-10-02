@@ -21,13 +21,14 @@ test: init
 	terraform plan -var-file=$(test_dir)/tests.tfvars -out=.plan $(test_dir)
 	terraform apply ".plan"
 
-nat_compare: init 
+nat_verify: 
 	gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
 	gcloud components install kubectl -q
 	### compare actual external IP with google NAT IP
-	kubectl run --generator=run-pod/v1 curl --image appropriate/curl sleep 600
-	sleep 180
-	test  "$(shell kubectl exec -it curl curl ifconfig.co)" == "$(shell gcloud compute addresses describe default-primary-cluster-regional-nat-nat-external-address --region $(google_region) --project $(google_project) |grep 'address:'| awk '{print $$2}')"
+	ACTUAL_IP="$(shell kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co | sed "s/pod .*//g")" ;\
+	NAT_IP="$(shell gcloud compute addresses describe default-primary-cluster-regional-nat-nat-external-address --region $(google_region) --project $(google_project) |grep 'address:'| awk '{print $$2}')" ;\
+	test  "$$ACTUAL_IP" == "$$NAT_IP"
+
 
 destroy: init
 	terraform plan --destroy -var-file=$(test_dir)/tests.tfvars -out=.plan $(test_dir)
