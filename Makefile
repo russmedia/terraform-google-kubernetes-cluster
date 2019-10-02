@@ -23,8 +23,9 @@ test: init
 
 nat_verify: 
 	until [ `gcloud container clusters describe primary-cluster-regional-nat --region $(google_region) --project $(google_project) --format='csv(status)' |grep RUNNING` ]; do echo "Waiting for cluster to be ready" ; sleep 60; done
-	gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
 	gcloud components install kubectl -q
+	gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
+	kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co
 	### compare actual external IP with google NAT IP
 	ACTUAL_IP="$(shell kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co | sed "s/pod .*//g")" ;\
 	NAT_IP="$(shell gcloud compute addresses describe default-primary-cluster-regional-nat-nat-external-address --region $(google_region) --project $(google_project) |grep 'address:'| awk '{print $$2}')" ;\
