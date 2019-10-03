@@ -87,7 +87,7 @@ variable "node_pools" {
       name               = "default-pool"
       initial_node_count = 1
       min_node_count     = 1
-      max_node_count     = 3
+      max_node_count     = 1
       version            = ""
       image_type         = "COS"
       machine_type       = "n1-standard-1"
