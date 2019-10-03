@@ -22,9 +22,9 @@ test: init
 	terraform apply ".plan"
 
 nat_verify: 
-	# gcloud components install kubectl -q
-	# gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
-	# ### Waiting for dns in the cluster to be ready
+	gcloud components install kubectl -q
+	gcloud container clusters get-credentials primary-cluster-regional-nat --region $(google_region) --project $(google_project)
+	### Waiting for dns in the cluster to be ready
 	until [ `kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co |grep -oE '([0-9]{1,3}[\.]){3}[0-9]{1,3}'` ]; do echo "Waiting for dns in the cluster to be ready" ; sleep 60; done
 	### compare actual external IP with google NAT IP
 	ACTUAL_IP=`kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co | grep -oE '([0-9]{1,3}[\.]){3}[0-9]{1,3}'` ;\
