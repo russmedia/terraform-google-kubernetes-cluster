@@ -8,21 +8,6 @@ module "primary-cluster" {
 
   # this cluster is testing existing network
   network = "${google_compute_network.main.name}"
-
-  #test with defined node pool (default node version)
-  node_pools = [
-    {
-      name               = "additional-pool"
-      initial_node_count = 1
-      min_node_count     = 1
-      max_node_count     = 1
-      version            = ""
-      image_type         = "COS"
-      machine_type       = "n1-standard-1"
-      preemptible        = false
-      tags               = "additional-pool worker"
-    },
-  ]
 }
 
 module "primary-cluster-regional" {
