@@ -91,7 +91,7 @@ variable "node_pools" {
       version            = ""
       image_type         = "COS"
       machine_type       = "n1-standard-1"
-      preemptible        = false
+      preemptible        = true
       tags               = "default-pool worker"
     },
   ]

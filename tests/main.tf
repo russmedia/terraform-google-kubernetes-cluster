@@ -6,8 +6,8 @@ module "primary-cluster" {
   project     = "${var.project}"
   environment = "${terraform.workspace}"
 
-  # this cluster is testing existing network
-  network = "${google_compute_network.main.name}"
+  # # this cluster is testing existing network
+  # network = "${google_compute_network.main.name}"
 }
 
 module "primary-cluster-regional" {
