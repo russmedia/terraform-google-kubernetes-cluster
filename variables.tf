@@ -87,11 +87,11 @@ variable "node_pools" {
       name               = "default-pool"
       initial_node_count = 1
       min_node_count     = 1
-      max_node_count     = 1
+      max_node_count     = 3
       version            = ""
       image_type         = "COS"
       machine_type       = "n1-standard-1"
-      preemptible        = true
+      preemptible        = false
       tags               = "default-pool worker"
     },
   ]
