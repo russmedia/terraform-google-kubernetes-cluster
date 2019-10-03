@@ -62,7 +62,7 @@ module "primary-cluster" {
 module "primary-cluster" {
   name                   = "my-cluster"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "2.3.0"
+  version                = "2.3.1"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -80,8 +80,8 @@ node_pools = [
     name                = "default-pool"
     initial_node_count  = 1
     min_node_count      = 1
-    max_node_count      = 3
-    version             = "1.11.8-gke.4"
+    max_node_count      = 1
+    version             = "1.13.7-gke.24"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
