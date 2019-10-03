@@ -29,6 +29,8 @@ nat_verify:
 	### compare actual external IP with google NAT IP
 	ACTUAL_IP=`kubectl run curl --rm --restart=Never -it --image=appropriate/curl --generator=run-pod/v1 --wait  -- -fsSL http://ifconfig.co | grep -oE '([0-9]{1,3}[\.]){3}[0-9]{1,3}'` ;\
 	NAT_IP=`gcloud compute addresses describe default-primary-cluster-regional-nat-nat-external-address --region $(google_region) --project $(google_project) |grep 'address:'| awk '{print $$2}'` ;\
+	echo "$$ACTUAL_IP" ;\
+	echo "$$NAT_IP" ;\
 	test  "$$ACTUAL_IP" == "$$NAT_IP"
 
 
