@@ -1,14 +1,14 @@
-# module "primary-cluster" {
-#   name        = "primary-cluster"
-#   source      = "../."
-#   region      = "${var.region}"
-#   zones       = "${var.zones}"
-#   project     = "${var.project}"
-#   environment = "${terraform.workspace}"
+module "primary-cluster" {
+  name        = "primary-cluster"
+  source      = "../."
+  region      = "${var.region}"
+  zones       = "${var.zones}"
+  project     = "${var.project}"
+  environment = "${terraform.workspace}"
 
-#   # this cluster is testing existing network
-#   network = "${google_compute_network.main.name}"
-# }
+  # this cluster is testing existing network
+  network = "${google_compute_network.main.name}"
+}
 
 module "primary-cluster-regional" {
   name        = "primary-cluster-regional"
