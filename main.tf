@@ -22,7 +22,7 @@ resource "google_container_cluster" "primary" {
   }
 
   node_locations = [
-    "${formatlist("%s-%s", var.region, var.zones)}",
+    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
   lifecycle {
@@ -95,7 +95,7 @@ resource "google_container_cluster" "primary-nat" {
   }
 
   node_locations = [
-    "${formatlist("%s-%s", var.region, var.zones)}",
+    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
   ]
 
   lifecycle {
