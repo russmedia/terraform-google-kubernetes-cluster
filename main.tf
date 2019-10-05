@@ -143,7 +143,7 @@ resource "google_container_cluster" "primary-regional-nat" {
 
 module "node-pool" {
   source            = "./modules/kubernetes_node_pools"
-  region            = "${var.region}"
+  region            = "${coalesce(replace(join("",google_container_cluster.primary.*.location), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.location), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.location), join("",google_container_cluster.primary-regional-nat.*.location))}"
   zones             = ["${var.zones}"]
   project           = "${var.project}"
   environment       = "${terraform.workspace}"
