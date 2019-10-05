@@ -9,7 +9,7 @@ resource "google_container_node_pool" "node_pool" {
   count              = "${var.regional_cluster ? 0 : length(var.node_pools)}"
   location           = "${var.region}-${var.zones[0]}"
   cluster            = "${var.cluster_name}"
-  version            = "${lookup(var.node_pools[count.index], "version", "")}"
+  version            = "${lookup(var.node_pools[count.index], "version")}"
   project            = "${var.project}"
   initial_node_count = "${lookup(var.node_pools[count.index], "initial_node_count")}"
 
