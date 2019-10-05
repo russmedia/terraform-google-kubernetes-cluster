@@ -47,7 +47,7 @@ If you need more control with versioning of your cluster, it is advised to speci
 module "primary-cluster" {
   name                   = "${terraform.workspace}"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "2.3.0"
+  version                = "3.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -62,7 +62,7 @@ module "primary-cluster" {
 module "primary-cluster" {
   name                   = "my-cluster"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "2.3.0"
+  version                = "3.0.0"
   region                 = "${var.google_region}"
   zones                  = "${var.google_zones}"
   project                = "${var.project}"
@@ -80,8 +80,8 @@ node_pools = [
     name                = "default-pool"
     initial_node_count  = 1
     min_node_count      = 1
-    max_node_count      = 3
-    version             = "1.11.8-gke.4"
+    max_node_count      = 1
+    version             = "1.13.7-gke.24"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
@@ -107,7 +107,7 @@ resource "google_compute_network" "default" {
 module "primary-cluster" {
   name        = "primary-cluster"
   source      = "russmedia/kubernetes-cluster/google"
-  version     = "2.3.0"
+  version     = "3.0.0"
   region      = "${var.google_region}"
   zones       = "${var.google_zones}"
   project     = "${var.project}"
@@ -120,7 +120,7 @@ module "primary-cluster" {
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
   source                               = "russmedia/kubernetes-cluster/google"
-  version                              = "2.3.0"
+  version                              = "3.0.0"
   region                               = "${var.google_region}"
   zones                                = "${var.google_zones}"
   project                              = "${var.project}"
@@ -167,6 +167,7 @@ Terraform always creates a subnetwork. The subnetwork name is taken from a patte
 
 - Zonal clusters: 
 A zonal cluster runs in one or more compute zones within a region. A multi-zone cluster runs its nodes across two or more compute zones within a single region. Zonal clusters run a single cluster master.
+**Important** zonal clusters from version 3.0.0 are using nodes only in the zone of the master. This is changed due to new nodes behavior on google cloud. Nodes in other zones can no longer register to cluster in a different zone.
 - Regional cluster:
 A regional cluster runs three cluster masters across three compute zones, and runs nodes in two or more compute zones.
 
