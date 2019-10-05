@@ -42,7 +42,7 @@ variable "region" {
 
 variable "zones" {
   type        = "list"
-  description = "Zones for Kubernetes workers"
+  description = "Zones for Kubernetes workers - please note - zonal cluster will spin out nodes in one zone only"
 }
 
 variable "regional_cluster" {

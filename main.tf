@@ -21,10 +21,6 @@ resource "google_container_cluster" "primary" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  node_locations = [
-    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
-  ]
-
   lifecycle {
     ignore_changes = ["subnetwork"]
   }
@@ -52,7 +48,7 @@ resource "google_container_cluster" "primary-regional" {
   }
 
   node_locations = [
-    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
+    "${formatlist("%s-%s", var.region, var.zones)}",
   ]
 
   lifecycle {
@@ -94,10 +90,6 @@ resource "google_container_cluster" "primary-nat" {
     services_secondary_range_name = "${google_compute_subnetwork.nodes-subnet.secondary_ip_range.1.range_name}"
   }
 
-  node_locations = [
-    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
-  ]
-
   lifecycle {
     ignore_changes = ["subnetwork"]
   }
@@ -138,7 +130,7 @@ resource "google_container_cluster" "primary-regional-nat" {
   }
 
   node_locations = [
-    "${formatlist("%s-%s", var.region, slice(var.zones,1,length(var.zones)))}",
+    "${formatlist("%s-%s", var.region, var.zones)}",
   ]
 
   lifecycle {
@@ -151,7 +143,7 @@ resource "google_container_cluster" "primary-regional-nat" {
 
 module "node-pool" {
   source            = "./modules/kubernetes_node_pools"
-  region            = "${coalesce(replace(join("",google_container_cluster.primary.*.zone), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.zone), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.region), join("",google_container_cluster.primary-regional-nat.*.region))}"
+  region            = "${coalesce(replace(join("",google_container_cluster.primary.*.location), "-${var.zones[0]}", ""), replace(join("",google_container_cluster.primary-nat.*.location), "-${var.zones[0]}", "") , join("",google_container_cluster.primary-regional.*.location), join("",google_container_cluster.primary-regional-nat.*.location))}"
   zones             = ["${var.zones}"]
   project           = "${var.project}"
   environment       = "${terraform.workspace}"
@@ -170,12 +162,13 @@ resource "google_compute_network" "default" {
 
 # Subnet for cluster nodes
 resource "google_compute_subnetwork" "nodes-subnet" {
-  depends_on    = ["google_compute_network.default"]
-  name          = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
-  ip_cidr_range = "${var.nodes_subnet_ip_cidr_range}"
-  network       = "${var.network == "" ? local.network_name : var.network}"
-  region        = "${var.region}"
-  project       = "${var.project}"
+  depends_on               = ["google_compute_network.default"]
+  name                     = "${var.subnetwork_name == "" ? local.subnetwork_name : var.subnetwork_name}"
+  ip_cidr_range            = "${var.nodes_subnet_ip_cidr_range}"
+  network                  = "${var.network == "" ? local.network_name : var.network}"
+  region                   = "${var.region}"
+  project                  = "${var.project}"
+  private_ip_google_access = "${var.nat_enabled ? true : false}"
 
   secondary_ip_range {
     range_name    = "${terraform.workspace}-container-range-1"
