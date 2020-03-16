@@ -1,6 +1,6 @@
 env:
   global:
-    - TF_VERSION=0.11.14
+    - TF_VERSION=0.12.23
     - GOOGLE_APPLICATION_CREDENTIALS=sa-gcp.json
 sudo: required
 language: bash
