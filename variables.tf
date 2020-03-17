@@ -82,7 +82,7 @@ variable "nodes_subnet_service_ip_cidr_range" {
 }
 
 variable "node_pools" {
-  type = list(string)
+  type = list(map(string))
 
   default = [
     {
