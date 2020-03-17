@@ -1,5 +1,5 @@
 variable "node_pools" {
-  type = list(string)
+  type = list(map(string))
 
   default = [
     {
