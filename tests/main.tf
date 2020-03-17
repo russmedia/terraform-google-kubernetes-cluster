@@ -1,22 +1,22 @@
 module "primary-cluster" {
   name        = "primary-cluster"
   source      = "../."
-  region      = "${var.region}"
-  zones       = "${var.zones}"
-  project     = "${var.project}"
-  environment = "${terraform.workspace}"
+  region      = var.region
+  zones       = var.zones
+  project     = var.project
+  environment = terraform.workspace
 
   # this cluster is testing existing network
-  network = "${google_compute_network.main.name}"
+  network = google_compute_network.main.name
 }
 
 module "primary-cluster-regional" {
   name        = "primary-cluster-regional"
   source      = "../."
-  region      = "${var.region}"
-  zones       = "${var.zones}"
-  project     = "${var.project}"
-  environment = "${terraform.workspace}"
+  region      = var.region
+  zones       = var.zones
+  project     = var.project
+  environment = terraform.workspace
 
   # this cluster is creating its own  network
   # network = "${google_compute_network.main.name}"
@@ -48,16 +48,16 @@ module "primary-cluster-regional" {
 module "primary-cluster-regional-nat" {
   name                                 = "primary-cluster-regional-nat"
   source                               = "../."
-  region                               = "${var.region}"
-  zones                                = "${var.zones}"
-  project                              = "${var.project}"
-  environment                          = "${terraform.workspace}"
-  network                              = "${google_compute_network.main.name}"
+  region                               = var.region
+  zones                                = var.zones
+  project                              = var.project
+  environment                          = terraform.workspace
+  network                              = google_compute_network.main.name
   master_subnet_ip_cidr_range          = "10.13.0.0/28"
   nodes_subnet_ip_cidr_range           = "10.103.0.0/24"
   nodes_subnet_container_ip_cidr_range = "172.23.0.0/16"
   nodes_subnet_service_ip_cidr_range   = "10.203.0.0/16"
-  min_master_version                   = "${var.kube_version}"
+  min_master_version                   = var.kube_version
 
   #test with defined node pool (specific version)
   node_pools = [
@@ -66,7 +66,7 @@ module "primary-cluster-regional-nat" {
       initial_node_count = 1
       min_node_count     = 1
       max_node_count     = 1
-      version            = "${var.kube_version}"
+      version            = var.kube_version
       image_type         = "COS"
       machine_type       = "n1-standard-1"
       preemptible        = false
@@ -90,5 +90,6 @@ module "primary-cluster-regional-nat" {
 resource "google_compute_network" "main" {
   name                    = "${terraform.workspace}-manual"
   auto_create_subnetworks = "false"
-  project                 = "${var.project}"
+  project                 = var.project
 }
+
