@@ -153,7 +153,7 @@ module "node-pool" {
     join("", google_container_cluster.primary-regional.*.location),
     join("", google_container_cluster.primary-regional-nat.*.location),
   )
-  zones             = [var.zones]
+  zones             = var.zones
   project           = var.project
   environment       = terraform.workspace
   cluster_name      = var.name
