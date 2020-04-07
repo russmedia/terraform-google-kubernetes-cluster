@@ -30,6 +30,8 @@ Please use google provider version = "~> 2.3"
 
 If you need more control with versioning of your cluster, it is advised to specify "min_master_version" and "version" in node-pools. Otherwise GKE will be using default version which might change in near future.
 
+# Compatibility
+This module is meant for use with Terraform 0.12. If you haven't upgraded and need a Terraform 0.11.x-compatible version of this module, the last released version intended for Terraform 0.11.x is 3.0.0.
 
 ## 1. Features
 
