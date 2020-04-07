@@ -26,7 +26,7 @@ Table of contents
       * [7. Acknowledgments](#6-acknowledgments)
 
 # Requirements
-Please use google provider version = "~> 2.3"
+Please use google provider version = "~> 3.14"
 
 If you need more control with versioning of your cluster, it is advised to specify "min_master_version" and "version" in node-pools. Otherwise GKE will be using default version which might change in near future.
 
@@ -47,14 +47,14 @@ This module is meant for use with Terraform 0.12. If you haven't upgraded and ne
 ### cluster with default node pool on preemptible
 ```hcl
 module "primary-cluster" {
-  name                   = "${terraform.workspace}"
+  name                   = terraform.workspace
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "3.0.0"
-  region                 = "${var.google_region}"
-  zones                  = "${var.google_zones}"
-  project                = "${var.project}"
-  environment            = "${terraform.workspace}" 
-  min_master_version     = "${var.master_version}"
+  version                = "4.0.0"
+  region                 = var.google_region
+  zones                  = var.google_zones
+  project                = var.project
+  environment            = terraform.workspace 
+  min_master_version     = var.master_version
 }
 ```
 
@@ -64,13 +64,13 @@ module "primary-cluster" {
 module "primary-cluster" {
   name                   = "my-cluster"
   source                 = "russmedia/kubernetes-cluster/google"
-  version                = "3.0.0"
-  region                 = "${var.google_region}"
-  zones                  = "${var.google_zones}"
-  project                = "${var.project}"
-  environment            = "${terraform.workspace}"
-  min_master_version     = "${var.master_version}"
-  node_pools             = "${var.node_pools}"
+  version                = "4.0.0"
+  region                 = var.google_region
+  zones                  = var.google_zones
+  project                = var.project
+  environment            = terraform.workspace
+  min_master_version     = var.master_version
+  node_pools             = var.node_pools
 }
 ```
 
@@ -83,7 +83,7 @@ node_pools = [
     initial_node_count  = 1
     min_node_count      = 1
     max_node_count      = 1
-    version             = "1.13.12-gke.30"
+    version             = "1.14.10-gke.34"
     image_type          = "COS"
     machine_type        = "n1-standard-1"
     preemptible         = true
@@ -99,9 +99,9 @@ Due to current limitations with depends_on feature and modules it is advised to 
 
 ```hcl
 resource "google_compute_network" "default" {
-  name                    = "${terraform.workspace}"
+  name                    = terraform.workspace
   auto_create_subnetworks = "false"
-  project                 = "${var.project}"
+  project                 = var.project
 }
 ```
 
@@ -109,12 +109,12 @@ resource "google_compute_network" "default" {
 module "primary-cluster" {
   name        = "primary-cluster"
   source      = "russmedia/kubernetes-cluster/google"
-  version     = "3.0.0"
-  region      = "${var.google_region}"
-  zones       = "${var.google_zones}"
-  project     = "${var.project}"
-  environment = "${terraform.workspace}"
-  network     = "${google_compute_network.default.name}"
+  version     = "4.0.0"
+  region      = var.google_region
+  zones       = var.google_zones
+  project     = var.project
+  environment = terraform.workspace
+  network     = google_compute_network.default.name
 }
 ```
 
@@ -122,28 +122,28 @@ module "primary-cluster" {
 module "secondary-cluster" {
   name                                 = "secondary-cluster"
   source                               = "russmedia/kubernetes-cluster/google"
-  version                              = "3.0.0"
-  region                               = "${var.google_region}"
-  zones                                = "${var.google_zones}"
-  project                              = "${var.project}"
-  environment                          = "${terraform.workspace}"
-  network                              = "${google_compute_network.default.name}"
+  version                              = "4.0.0"
+  region                               = var.google_region
+  zones                                = var.google_zones
+  project                              = var.project
+  environment                          = terraform.workspace
+  network                              = google_compute_network.default.name
   nodes_subnet_ip_cidr_range           = "10.101.0.0/24"
   nodes_subnet_container_ip_cidr_range = "172.21.0.0/16"
   nodes_subnet_service_ip_cidr_range   = "10.201.0.0/16"
 }
 ```
-**Note: secondary clusters need to have nodes_subnet_ip_cidr_range nodes_subnet_container_ip_cidr_range and nodes_subnet_service_ip_cidr_range defined, otherwise you will run into IP conflict.**
+**Note: secondary clusters need to have nodes_subnet_ip_cidr_range nodes_subnet_container_ip_cidr_range and nodes_subnet_service_ip_cidr_range defined, otherwise you will run into IP conflict. Also only one cluster can have nat_enabled set to 'true'.**
 
-### add nat module (optional)
+### add nat module (optional and depreciated - please use build in nat option - variable "nat_enabled")
 
 Adding NAT module for outgoing Kubernetes IP:
 ```hcl
 module "nat" {
   source     = "github.com/GoogleCloudPlatform/terraform-google-nat-gateway?ref=1.2.0"
-  region     = "${var.google_region}"
-  project    = "${var.project}"
-  network    = "${terraform.workspace}"
+  region     = var.google_region
+  project    = var.project
+  network    = terraform.workspace
   subnetwork = "${terraform.workspace}-nodes-subnet"
   tags       = ["nat-${terraform.workspace}"]
 }
