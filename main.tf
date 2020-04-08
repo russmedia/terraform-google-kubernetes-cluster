@@ -31,7 +31,7 @@ resource "google_container_cluster" "primary" {
 
 resource "google_container_cluster" "primary-regional" {
   name  = var.name
-  count = var.regional_cluster && false == var.nat_enabled ? 1 : 0
+  count = var.regional_cluster && var.nat_enabled == false ? 1 : 0
 
   location = var.region
 
@@ -61,7 +61,7 @@ resource "google_container_cluster" "primary-nat" {
   name = var.name
 
   location = "${var.region}-${var.zones[0]}"
-  count    = false == var.regional_cluster && var.nat_enabled ? 1 : 0
+  count    = var.regional_cluster == false && var.nat_enabled ? 1 : 0
 
   min_master_version = var.min_master_version
   enable_legacy_abac = false
