@@ -135,7 +135,7 @@ module "secondary-cluster" {
 ```
 **Note: secondary clusters need to have nodes_subnet_ip_cidr_range nodes_subnet_container_ip_cidr_range and nodes_subnet_service_ip_cidr_range defined, otherwise you will run into IP conflict. Also only one cluster can have nat_enabled set to 'true'.**
 
-### add nat module (optional and depreciated - please use build in nat option - variable "nat_enabled")
+### add nat module (optional and deprecated - please use build in nat option - variable "nat_enabled")
 
 Adding NAT module for outgoing Kubernetes IP:
 ```hcl
