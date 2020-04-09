@@ -17,3 +17,7 @@ output "master_ip" {
   )
 }
 
+output "outgoing_ip" {
+  value = google_compute_address.address.*.address
+}
+
