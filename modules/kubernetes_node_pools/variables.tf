@@ -1,5 +1,5 @@
 variable "node_pools" {
-  type = "list"
+  type = list(map(string))
 
   default = [
     {
@@ -28,7 +28,9 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
-  EOF
+  
+EOF
+
 }
 
 variable "node_pools_scopes" {
@@ -51,7 +53,7 @@ variable "region" {
 }
 
 variable "zones" {
-  type        = "list"
+  type        = list(string)
   description = "Zones for node pool"
 }
 
@@ -68,3 +70,4 @@ variable "regional_cluster" {
   default     = false
   description = "Set to `true` to create node pool for regional cluster."
 }
+

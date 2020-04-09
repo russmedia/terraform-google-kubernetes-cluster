@@ -18,6 +18,7 @@ variable "network" {
     - if we define a network here it needs to exist already
 EOF
 
+
   default = ""
 }
 
@@ -27,6 +28,7 @@ variable "subnetwork_name" {
     - module will create a subnetwork based on terraform workspace and cluster name if this variable is empty
     - if we define a network here it needs to have uniqe name 
 EOF
+
 
   default = ""
 }
@@ -41,7 +43,7 @@ variable "region" {
 }
 
 variable "zones" {
-  type        = "list"
+  type        = list(string)
   description = "Zones for Kubernetes workers - please note - zonal cluster will spin out nodes in one zone only"
 }
 
@@ -80,7 +82,7 @@ variable "nodes_subnet_service_ip_cidr_range" {
 }
 
 variable "node_pools" {
-  type = "list"
+  type = list(map(string))
 
   default = [
     {
@@ -109,7 +111,9 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
-  EOF
+  
+EOF
+
 }
 
 variable "node_pools_scopes" {
@@ -122,3 +126,4 @@ variable "node_pools_scopes" {
 
   description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute], global per all node pools"
 }
+

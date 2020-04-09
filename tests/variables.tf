@@ -1,8 +1,13 @@
-variable "region" {}
-
-variable "zones" {
-  type = "list"
+variable "region" {
 }
 
-variable project {}
-variable kube_version {}
+variable "zones" {
+  type = list(string)
+}
+
+variable "project" {
+}
+
+variable "kube_version" {
+}
+
