@@ -95,7 +95,7 @@ node_pools = [
 
 **Note: at least one node pool must have `initial_node_count` > 0.**
 
-## Since 5.0.0 module supports `no_schedule_taint` and `no_execute_taint` - they will add `schedulable=equals:NoSchedule` or `executable=equals:NoExecute` - which will effect in only specific nodes being scheduled on those nodes i.e. Please see [k8s docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) for more info:
+## Since version 5.0.0 module supports `no_schedule_taint` and `no_execute_taint` - they will add `schedulable=equals:NoSchedule` or `executable=equals:NoExecute` - which will effect in only specific nodes being scheduled on those nodes i.e. Please see [k8s docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) for more info:
 
 ```
 apiVersion: v1
