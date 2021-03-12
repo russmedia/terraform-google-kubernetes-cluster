@@ -46,7 +46,22 @@ resource "google_container_node_pool" "node_pool" {
         ),
       ),
     )
-
+    dynamic "taint" {
+      for_each = lookup(var.node_pools[count.index], "no_execute_taint", false) ? var.no_execute_taint : []
+      content {
+        effect = taint.value["effect"]
+        key    = taint.value["key"]
+        value  = taint.value["value"]
+      }
+    }
+    dynamic "taint" {
+      for_each = lookup(var.node_pools[count.index], "no_schedule_taint", false) ? var.no_schedule_taint : []
+      content {
+        effect = taint.value["effect"]
+        key    = taint.value["key"]
+        value  = taint.value["value"]
+      }
+    }
     tags = split(" ", var.node_pools[count.index]["tags"])
   }
 }
@@ -93,7 +108,22 @@ resource "google_container_node_pool" "node_pool_regional" {
         ),
       ),
     )
-
+    dynamic "taint" {
+      for_each = lookup(var.node_pools[count.index], "no_execute_taint", false) ? var.no_execute_taint : []
+      content {
+        effect = taint.value["effect"]
+        key    = taint.value["key"]
+        value  = taint.value["value"]
+      }
+    }
+    dynamic "taint" {
+      for_each = lookup(var.node_pools[count.index], "no_schedule_taint", false) ? var.no_schedule_taint : []
+      content {
+        effect = taint.value["effect"]
+        key    = taint.value["key"]
+        value  = taint.value["value"]
+      }
+    }
     tags = split(" ", var.node_pools[count.index]["tags"])
   }
 }

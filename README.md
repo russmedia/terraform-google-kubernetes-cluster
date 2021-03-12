@@ -91,7 +91,53 @@ node_pools = [
   },
 ]
 ```
+
+
 **Note: at least one node pool must have `initial_node_count` > 0.**
+
+### Since version 5.0.0 module supports `no_schedule_taint` and `no_execute_taint` - they will add `schedulable=equals:NoSchedule` or `executable=equals:NoExecute` - which will effect in only specific nodes being scheduled on those nodes. Please see [k8s docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) for more info. 
+
+Example usage with "NoSchedule":
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+    - key: "schedulable"
+      operator: "Exists"
+      effect: "NoSchedule"
+```
+
+Example usage with "NoExecute":
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+    - key: "executable"
+      operator: "Exists"
+      effect: "NoExecute"
+```
+
+**Note - if node has both taints NoExecute and NoSchedule - you need to add both tolerations to pod to be allowed there.**
 
 ###  multiple clusters
 

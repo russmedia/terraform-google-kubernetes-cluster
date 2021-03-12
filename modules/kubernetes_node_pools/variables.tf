@@ -25,6 +25,8 @@ variable "node_pools" {
       - image_type
       - machine_type
       - preemptible [bool]
+      - no_execute_taint [bool]
+      - no_schedule_taint [bool]
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
@@ -70,4 +72,23 @@ variable "regional_cluster" {
   default     = false
   description = "Set to `true` to create node pool for regional cluster."
 }
+variable "no_execute_taint" {
+  type        = list(map(any))
+  description = "Object containing node NoExecute taints"
 
+  default = [{
+    key    = "executable"
+    value  = "equals"
+    effect = "NO_EXECUTE"
+  }]
+}
+variable "no_schedule_taint" {
+  type        = list(map(any))
+  description = "Object containing node NoSchedule taints"
+
+  default = [{
+    key    = "schedulable"
+    value  = "equals",
+    effect = "NO_SCHEDULE"
+  }]
+}
