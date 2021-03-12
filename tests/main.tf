@@ -59,7 +59,7 @@ module "primary-cluster-regional-nat" {
   nodes_subnet_service_ip_cidr_range   = "10.203.0.0/16"
   min_master_version                   = var.kube_version
 
-  #test with defined node pool (specific version)
+  #test with defined node pool (specific version with NoExecute and NoSchedule taint)
   node_pools = [
     {
       name               = "additional-pool"
@@ -70,6 +70,8 @@ module "primary-cluster-regional-nat" {
       image_type         = "COS"
       machine_type       = "n1-standard-1"
       preemptible        = false
+      no_execute_taint   = true
+      no_schedule_taint  = true
       tags               = "additional-pool worker"
     },
   ]
