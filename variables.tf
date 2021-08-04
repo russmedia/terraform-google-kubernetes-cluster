@@ -13,7 +13,7 @@ variable "use_existing_terraform_network" {
 
 variable "network" {
   description = <<EOF
-  Network to create the cluster in 
+  Network to create the cluster in
     - module will create a network based on terraform workspace name if this variable is empty
     - if we define a network here it needs to exist already
 EOF
@@ -24,9 +24,9 @@ EOF
 
 variable "subnetwork_name" {
   description = <<EOF
-  Subnetwork to create the cluster in 
+  Subnetwork to create the cluster in
     - module will create a subnetwork based on terraform workspace and cluster name if this variable is empty
-    - if we define a network here it needs to have uniqe name 
+    - if we define a network here it needs to have uniqe name
 EOF
 
 
@@ -113,7 +113,6 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
-  
 EOF
 
 }
@@ -127,4 +126,8 @@ variable "node_pools_scopes" {
   ]
 
   description = "list of OAuth scopes e.g.: https://www.googleapis.com/auth/compute], global per all node pools"
+}
+
+variable "notifications_enabled" {
+  description = "Enable upgrade notifications sent to Pub/Sub topic (optional). This topic can be read e.g. by Google Function triggered by topic message. Example: Send all upgrade notifications to Slack."
 }
