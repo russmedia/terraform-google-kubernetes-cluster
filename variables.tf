@@ -95,6 +95,7 @@ variable "node_pools" {
       machine_type       = "n1-standard-1"
       preemptible        = true
       tags               = "default-pool worker"
+      disable_autoscaling = false
     },
   ]
 
@@ -113,9 +114,33 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
+      - disable_autoscaling [bool]
+      - custom_node_locations [space separated locations]
   
 EOF
 
+}
+
+variable "no_execute_taint" {
+  type        = list(map(any))
+  description = "Object containing node NoExecute taints"
+
+  default = [{
+    key    = "executable"
+    value  = "equals"
+    effect = "NO_EXECUTE"
+  }]
+}
+
+variable "no_schedule_taint" {
+  type        = list(map(any))
+  description = "Object containing node NoSchedule taints for all node pools"
+
+  default = [{
+    key    = "schedulable"
+    value  = "equals",
+    effect = "NO_SCHEDULE"
+  }]
 }
 
 variable "node_pools_scopes" {

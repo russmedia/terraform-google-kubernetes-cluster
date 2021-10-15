@@ -12,10 +12,14 @@ resource "google_container_node_pool" "node_pool" {
   version            = var.node_pools[count.index]["version"]
   project            = var.project
   initial_node_count = var.node_pools[count.index]["initial_node_count"]
+  node_locations = lookup(var.node_pools[count.index], "custom_node_locations", "") != "" ? split(" ", var.node_pools[count.index]["custom_node_locations"]) : null
 
-  autoscaling {
-    min_node_count = var.node_pools[count.index]["min_node_count"]
-    max_node_count = var.node_pools[count.index]["max_node_count"]
+  dynamic "autoscaling" {
+    for_each = var.node_pools[count.index].disable_autoscaling ? [] : [1]
+    content {
+      min_node_count = contains(keys(var.node_pools[count.index]), "min_node_count") ? var.node_pools[count.index]["min_node_count"] : 0
+      max_node_count = contains(keys(var.node_pools[count.index]), "max_node_count") ? var.node_pools[count.index]["max_node_count"] : 1
+    }
   }
 
   node_config {
@@ -74,10 +78,14 @@ resource "google_container_node_pool" "node_pool_regional" {
   version            = var.node_pools[count.index]["version"]
   project            = var.project
   initial_node_count = var.node_pools[count.index]["initial_node_count"]
+  node_locations = lookup(var.node_pools[count.index], "custom_node_locations", "") != "" ? split(" ", var.node_pools[count.index]["custom_node_locations"]) : null
 
-  autoscaling {
-    min_node_count = var.node_pools[count.index]["min_node_count"]
-    max_node_count = var.node_pools[count.index]["max_node_count"]
+  dynamic "autoscaling" {
+    for_each = var.node_pools[count.index].disable_autoscaling ? [] : [1]
+    content {
+      min_node_count = contains(keys(var.node_pools[count.index]), "min_node_count") ? var.node_pools[count.index]["min_node_count"] : 0
+      max_node_count = contains(keys(var.node_pools[count.index]), "max_node_count") ? var.node_pools[count.index]["max_node_count"] : 1
+    }
   }
 
   node_config {

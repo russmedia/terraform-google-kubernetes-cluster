@@ -30,6 +30,7 @@ variable "node_pools" {
       - tags [space separated tags]
       - custom_label_keys [space separated tags, must match the number of custom_label_values]
       - custom_label_values [space separated tags, must match the number of custom_label_keys]
+      - disable_autoscaling [bool]
   
 EOF
 
@@ -91,4 +92,9 @@ variable "no_schedule_taint" {
     value  = "equals",
     effect = "NO_SCHEDULE"
   }]
+}
+
+variable "disable_autoscaling" {
+  description = "Allows to disable autoscaling"
+  default = false
 }

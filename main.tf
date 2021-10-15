@@ -160,6 +160,8 @@ module "node-pool" {
   node_pools        = var.node_pools
   regional_cluster  = var.regional_cluster
   node_pools_scopes = var.node_pools_scopes
+  no_execute_taint  = var.no_execute_taint
+  no_schedule_taint = var.no_schedule_taint
 }
 
 resource "google_compute_network" "default" {
