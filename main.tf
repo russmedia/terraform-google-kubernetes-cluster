@@ -1,6 +1,17 @@
 locals {
   network_name    = "${terraform.workspace}-${var.name}"
   subnetwork_name = "${terraform.workspace}-${var.name}-nodes-subnet"
+
+  cluster_output_master_auth      = coalescelist(
+    concat(google_container_cluster.primary.*.master_auth, []),
+    concat(google_container_cluster.primary-nat.*.master_auth, []),
+    concat(google_container_cluster.primary-regional.*.master_auth, []),
+    concat(google_container_cluster.primary-regional-nat.*.master_auth, [])
+  )
+  cluster_master_auth_list_layer1 = local.cluster_output_master_auth
+  cluster_master_auth_list_layer2 = local.cluster_master_auth_list_layer1[0]
+  cluster_master_auth_map         = local.cluster_master_auth_list_layer2[0]
+  cluster_ca_certificate          = local.cluster_master_auth_map["cluster_ca_certificate"]
 }
 
 resource "google_container_cluster" "primary" {
