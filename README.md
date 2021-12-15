@@ -1,3 +1,8 @@
+> ## This Repo Is No Longer Maintained
+> 
+> Please consider migrating to official terraform-google-kubernetes-engine module:  https://github.com/terraform-google-modules/terraform-google-kubernetes-engine.
+
+
 # Overview
 GKE Kubernetes module with node pools submodule
 
