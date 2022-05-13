@@ -27,6 +27,13 @@ resource "google_container_cluster" "primary" {
 
   initial_node_count       = 1
   remove_default_node_pool = true
+
+  notification_config {
+    pubsub {
+      enabled = var.notifications_enabled == true
+      topic = google_pubsub_topic.cluster-upgrade-notification.id
+    }
+  }
 }
 
 resource "google_container_cluster" "primary-regional" {
@@ -55,6 +62,13 @@ resource "google_container_cluster" "primary-regional" {
 
   initial_node_count       = 1
   remove_default_node_pool = true
+
+  notification_config {
+    pubsub {
+      enabled = var.notifications_enabled == true
+      topic = google_pubsub_topic.cluster-upgrade-notification.id
+    }
+  }
 }
 
 resource "google_container_cluster" "primary-nat" {
@@ -94,6 +108,13 @@ resource "google_container_cluster" "primary-nat" {
 
   initial_node_count       = 1
   remove_default_node_pool = true
+
+  notification_config {
+    pubsub {
+      enabled = var.notifications_enabled == true
+      topic = google_pubsub_topic.cluster-upgrade-notification.id
+    }
+  }
 }
 
 resource "google_container_cluster" "primary-regional-nat" {
@@ -135,6 +156,13 @@ resource "google_container_cluster" "primary-regional-nat" {
 
   initial_node_count       = 1
   remove_default_node_pool = true
+
+  notification_config {
+    pubsub {
+      enabled = var.notifications_enabled == true
+      topic = google_pubsub_topic.cluster-upgrade-notification.id
+    }
+  }
 }
 
 module "node-pool" {
@@ -216,3 +244,6 @@ resource "google_compute_router_nat" "advanced-nat" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
+resource "google_pubsub_topic" "cluster-upgrade-notification" {
+  name  = "tf-kubernetes-cluster-upgrade-notifications"
+}
