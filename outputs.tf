@@ -21,3 +21,7 @@ output "outgoing_ip" {
   value = google_compute_address.address.*.address
 }
 
+output "cluster_ca_certificate" {
+  value     = local.cluster_ca_certificate
+  sensitive = true
+}
